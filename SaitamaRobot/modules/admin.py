@@ -462,7 +462,7 @@ __help__ = """
  • `/invitelink`*:* gets invitelink
  • `/promote`*:* promotes the user replied to
  • `/demote`*:* demotes the user replied to
- • `/title <title here>`*:* sets a custom title for an admin that the bot promoted
+ • `/settitle <title here>`*:* sets a custom title for an admin that the bot promoted
  • `/admincache`*:* force refresh the admins list
 """
 
@@ -476,7 +476,7 @@ INVITE_HANDLER = DisableAbleCommandHandler("invitelink", invite)
 PROMOTE_HANDLER = DisableAbleCommandHandler("promote", promote)
 DEMOTE_HANDLER = DisableAbleCommandHandler("demote", demote)
 
-SET_TITLE_HANDLER = CommandHandler("title", set_title)
+SET_TITLE_HANDLER = CommandHandler("settitle", set_title)
 ADMIN_REFRESH_HANDLER = CommandHandler(
     "admincache", refresh_admin, filters=Filters.group)
 
