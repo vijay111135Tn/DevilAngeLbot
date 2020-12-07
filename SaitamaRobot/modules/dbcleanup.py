@@ -1,6 +1,5 @@
 from time import sleep
 
-import SaitamaRobot.modules.sql.global_bans_sql as gban_sql
 import SaitamaRobot.modules.sql.users_sql as user_sql
 from SaitamaRobot import DEV_USERS, OWNER_ID, dispatcher
 from SaitamaRobot.modules.helper_funcs.chat_status import dev_plus
@@ -57,35 +56,6 @@ def get_invalid_chats(update: Update,
             user_sql.rem_chat(muted_chat)
         return kicked_chats
 
-
-def get_invalid_gban(update: Update,
-                     context: CallbackContext,
-                     remove: bool = False):
-    bot = context.bot
-    banned = gban_sql.get_gban_list()
-    ungbanned_users = 0
-    ungban_list = []
-
-    for user in banned:
-        user_id = user["user_id"]
-        sleep(0.1)
-        try:
-            bot.get_chat(user_id)
-        except BadRequest:
-            ungbanned_users += 1
-            ungban_list.append(user_id)
-        except:
-            pass
-
-    if not remove:
-        return ungbanned_users
-    else:
-        for user_id in ungban_list:
-            sleep(0.1)
-            gban_sql.ungban_user(user_id)
-        return ungbanned_users
-
-
 @run_async
 @dev_plus
 def dbcleanup(update: Update, context: CallbackContext):
@@ -94,11 +64,7 @@ def dbcleanup(update: Update, context: CallbackContext):
     msg.reply_text("Getting invalid chat count ...")
     invalid_chat_count = get_invalid_chats(update, context)
 
-    msg.reply_text("Getting invalid gbanned count ...")
-    invalid_gban_count = get_invalid_gban(update, context)
-
     reply = f"Total invalid chats - {invalid_chat_count}\n"
-    reply += f"Total invalid gbanned users - {invalid_gban_count}"
 
     buttons = [[InlineKeyboardButton("Cleanup DB", callback_data="db_cleanup")]]
 
@@ -131,9 +97,8 @@ def callback_button(update: Update, context: CallbackContext):
             bot.editMessageText("Cleaning up DB ...", chat_id,
                                 message.message_id)
             invalid_chat_count = get_invalid_chats(update, context, True)
-            invalid_gban_count = get_invalid_gban(update, context, True)
-            reply = "Cleaned up {} chats and {} gbanned users from db.".format(
-                invalid_chat_count, invalid_gban_count)
+            reply = "Cleaned up {} chats from db.".format(
+                invalid_chat_count)
             bot.sendMessage(chat_id, reply)
         else:
             query.answer("You are not allowed to use this.")
