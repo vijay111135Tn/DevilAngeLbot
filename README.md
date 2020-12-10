@@ -7,8 +7,9 @@ A modular Telegram Python bot running on python3 with a sqlalchemy database and 
 
 Can be found on telegram as [Clara](https://t.me/MissClaraBot).
 
-The Support group can be reached out to at [One Punch Support](https://t.me/OnePunchSupport), where you can ask for help about [SaitamaRobot](https://t.me/SaitamaRobot), discover/request new features, report bugs, and stay in the loop whenever a new update is available. 
+The Support group can be reached out to at [Clara Bot Support ](https://t.me/MissClaraSupport), where you can ask for help about [MissClara](https://t.me/MissClaraBot), discover/request new features, report bugs, and stay in the loop whenever a new update is available. 
 
+[Clara Updates Channel](https://t.me/MissClaraChannel)
 News channel as at [One Punch Updates](https://t.me/OnePunchUpdates) 
 
 ## How to setup/deploy.
