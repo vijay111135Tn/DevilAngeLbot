@@ -571,10 +571,6 @@ Group admins/group owners do not need these commands.
  ╔ *Speedtest:*
  ╚ `/speedtest`*:* Runs a speedtest and gives you 2 options to choose from, text or image output
 
- ╔ *Global Bans:*
- ╠ `/gban user reason`*:* Globally bans a user
- ╚ `/ungban user reason`*:* Unbans the user from the global bans list
-
  ╔ *Module loading:*
  ╠ `/listmodules`*:* Lists names of all modules
  ╠ `/load modulename`*:* Loads the said module to 
