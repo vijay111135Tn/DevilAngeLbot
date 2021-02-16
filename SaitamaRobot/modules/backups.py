@@ -140,6 +140,27 @@ def export_data(update, context):
         chat = update.effective_chat
         chat_id = update.effective_chat.id
         # chat_name = update.effective_message.chat.title
+	jam = time.time()
+    new_jam = jam + 10800
+    checkchat = get_chat(chat_id, chat_data)
+    if checkchat.get("status"):
+        if jam <= int(checkchat.get("value")):
+            timeformatt = time.strftime(
+                "%H:%M:%S %d/%m/%Y", time.localtime(checkchat.get("value"))
+            )
+            update.effective_message.reply_text(
+                "You can only backup once a day!\nYou can backup again in about `{}`".format(
+                    timeformatt
+                ),
+                parse_mode=ParseMode.MARKDOWN,
+            )
+            return
+        else:
+            if user.id != OWNER_ID:
+                put_chat(chat_id, new_jam, chat_data)
+    else:
+        if user.id != OWNER_ID:
+            put_chat(chat_id, new_jam, chat_data)
 
     note_list = sql.get_all_chat_notes(chat_id)
     backup = {}
@@ -322,6 +343,20 @@ def export_data(update, context):
         parse_mode=ParseMode.MARKDOWN,
     )
     os.remove("SaitamaRobot{}.backup".format(chat_id))  # Cleaning file
+
+# Temporary data
+def put_chat(chat_id, value, chat_data):
+    # print(chat_data)
+    status = value is not False
+    chat_data[chat_id] = {"backups": {"status": status, "value": value}}
+
+
+def get_chat(chat_id, chat_data):
+    # print(chat_data)
+    try:
+        return chat_data[chat_id]["backups"]
+    except KeyError:
+        return {"status": False, "value": False}
 
 
 __mod_name__ = "Backups"
