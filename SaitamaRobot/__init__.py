@@ -87,6 +87,7 @@ if ENV:
     WALL_API = os.environ.get('WALL_API', None)
     SUPPORT_CHAT = os.environ.get('SUPPORT_CHAT', None)
     SPAMWATCH_SUPPORT_CHAT = os.environ.get('SPAMWATCH_SUPPORT_CHAT', None)
+    ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True)
 
     try:
         BL_CHATS = set(int(x) for x in os.environ.get('BL_CHATS', "").split())
