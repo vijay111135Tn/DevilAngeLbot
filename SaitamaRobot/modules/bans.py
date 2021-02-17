@@ -269,7 +269,8 @@ def punch(update: Update, context: CallbackContext) -> str:
         bot.sendMessage(
             chat.id,
             f"Yeah right, Kicked! {mention_html(member.user.id, html.escape(member.user.first_name))}.",
-            parse_mode=ParseMode.HTML)
+            parse_mode=ParseMode.HTML,
+        )
         log = (
             f"<b>{html.escape(chat.title)}:</b>\n"
             f"#KICKED\n"
@@ -413,8 +414,7 @@ TEMPBAN_HANDLER = CommandHandler(["tban"], temp_ban)
 PUNCH_HANDLER = CommandHandler("kick", punch)
 UNBAN_HANDLER = CommandHandler("unban", unban)
 ROAR_HANDLER = CommandHandler("roar", selfunban)
-PUNCHME_HANDLER = DisableAbleCommandHandler(
-    "kickme", punchme, filters=Filters.group)
+PUNCHME_HANDLER = DisableAbleCommandHandler("kickme", punchme, filters=Filters.group)
 
 dispatcher.add_handler(BAN_HANDLER)
 dispatcher.add_handler(TEMPBAN_HANDLER)

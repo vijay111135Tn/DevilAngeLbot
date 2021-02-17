@@ -102,7 +102,6 @@ def hpmanager(user):
     # Example: If HP is 100 but gbanned
     # Available HP is 5% of 100 = 5HP
 
-
     # Bad status effects:
     # gbanned users will always have 5% HP from max HP
     # Example: If HP is 100 but gbanned

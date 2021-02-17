@@ -42,8 +42,7 @@ def import_data(update, context):
         chat_name = dispatcher.bot.getChat(conn).title
     else:
         if update.effective_message.chat.type == "private":
-            update.effective_message.reply_text(
-                "This is a group only command!")
+            update.effective_message.reply_text("This is a group only command!")
             return ""
 
         chat = update.effective_chat
@@ -51,8 +50,7 @@ def import_data(update, context):
 
     if msg.reply_to_message and msg.reply_to_message.document:
         try:
-            file_info = context.bot.get_file(
-                msg.reply_to_message.document.file_id)
+            file_info = context.bot.get_file(msg.reply_to_message.document.file_id)
         except BadRequest:
             msg.reply_text(
                 "Try downloading and uploading the file yourself again, This one seem broken to me!"
@@ -138,8 +136,7 @@ def export_data(update, context):
         # chat_name = dispatcher.bot.getChat(conn).title
     else:
         if update.effective_message.chat.type == "private":
-            update.effective_message.reply_text(
-                "This is a group only command!")
+            update.effective_message.reply_text("This is a group only command!")
             return ""
         chat = update.effective_chat
         chat_id = update.effective_chat.id
@@ -326,8 +323,9 @@ def export_data(update, context):
     context.bot.sendDocument(
         current_chat_id,
         document=open("Clara{}.backup".format(chat_id), "rb"),
-        caption="*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n\nNote: This `MissClaraBot-Backup` was specially made for notes."
-        .format(chat.title, chat_id, tgl),
+        caption="*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n\nNote: This `MissClaraBot-Backup` was specially made for notes.".format(
+            chat.title, chat_id, tgl
+        ),
         timeout=360,
         reply_to_message_id=msg.message_id,
         parse_mode=ParseMode.MARKDOWN,
