@@ -2,7 +2,6 @@ import html
 import re
 import os
 import requests
-import subprocess
 
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.types import ChannelParticipantsAdmins
@@ -23,6 +22,7 @@ from SaitamaRobot import (
     WOLVES,
     INFOPIC,
     dispatcher,
+    sw,
 )
 from SaitamaRobot.__main__ import STATS, TOKEN, USER_INFO
 import SaitamaRobot.modules.sql.userinfo_sql as sql
@@ -93,6 +93,16 @@ def hpmanager(user):
     # Commenting out fban health decrease cause it wasnt working and isnt needed ig.
     # _, fbanlist = get_user_fbanlist(user.id)
     # new_hp -= no_by_per(total_hp, 2 * len(fbanlist))
+
+    # Commenting out fban health decrease cause it wasnt working and isnt needed ig.
+    # _, fbanlist = get_user_fbanlist(user.id)
+    # new_hp -= no_by_per(total_hp, 2 * len(fbanlist))
+
+    # Bad status effects:
+    # gbanned users will always have 5% HP from max HP
+    # Example: If HP is 100 but gbanned
+    # Available HP is 5% of 100 = 5HP
+
 
     # Bad status effects:
     # gbanned users will always have 5% HP from max HP
@@ -405,16 +415,7 @@ def set_about_me(update: Update, context: CallbackContext):
 @run_async
 @sudo_plus
 def stats(update: Update, context: CallbackContext):
-    process = subprocess.Popen(
-        "neofetch --stdout", shell=True, text=True, stdout=subprocess.PIPE
-    )
-    output = process.communicate()[0]
-    stats = (
-        "<b>Current stats:</b>\n"
-        + "\n"
-        + output
-        + "\n".join([mod.__stats__() for mod in STATS])
-    )
+    stats = "<b>📊 Current stats:</b>\n" + "\n".join([mod.__stats__() for mod in STATS])
     result = re.sub(r"(\d+)", r"<code>\1</code>", stats)
     update.effective_message.reply_text(result, parse_mode=ParseMode.HTML)
 
@@ -513,23 +514,23 @@ __help__ = """
  • `/id`*:* get the current group id. If used by replying to a message, gets that user's id.
  • `/gifid`*:* reply to a gif to me to tell you its file ID.
 
-*Self addded information:* 
+*Self addded information:*
  • `/setme <text>`*:* will set your info
  • `/me`*:* will get your or another user's info.
 Examples:
  `/setme I am a wolf.`
  `/me @username(defaults to yours if no user specified)`
 
-*Information others add on you:* 
+*Information others add on you:*
  • `/bio`*:* will get your or another user's bio. This cannot be set by yourself.
-• `/setbio <text>`*:* while replying, will save another user's bio 
+• `/setbio <text>`*:* while replying, will save another user's bio
 Examples:
  `/bio @username(defaults to yours if not specified).`
  `/setbio This user is a wolf` (reply to the user)
 
 *Overall Information about you:*
- • `/info`*:* get information about a user. 
- 
+ • `/info`*:* get information about a user.
+
 *What is that health thingy?*
  Come and see [HP System explained](https://t.me/OnePunchUpdates/192)
 """

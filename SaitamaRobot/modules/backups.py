@@ -6,7 +6,7 @@ from telegram.error import BadRequest
 from telegram.ext import CommandHandler, run_async
 
 import SaitamaRobot.modules.sql.notes_sql as sql
-from SaitamaRobot import dispatcher, LOGGER, OWNER_ID, JOIN_LOGGER
+from SaitamaRobot import dispatcher, LOGGER, OWNER_ID, JOIN_LOGGER, SUPPORT_CHAT
 from SaitamaRobot.__main__ import DATA_IMPORT
 from SaitamaRobot.modules.helper_funcs.chat_status import user_admin
 from SaitamaRobot.modules.helper_funcs.alternate import typing_action
@@ -48,8 +48,7 @@ def import_data(update, context):
 
     if msg.reply_to_message and msg.reply_to_message.document:
         try:
-            file_info = context.bot.get_file(
-                msg.reply_to_message.document.file_id)
+            file_info = context.bot.get_file(msg.reply_to_message.document.file_id)
         except BadRequest:
             msg.reply_text(
                 "Try downloading and uploading the file yourself again, This one seem broken to me!"
@@ -73,13 +72,13 @@ def import_data(update, context):
             if data.get(str(chat.id)) is None:
                 if conn:
                     text = "Backup comes from another chat, I can't return another chat to chat *{}*".format(
-                        chat_name)
+                        chat_name
+                    )
                 else:
                     text = "Backup comes from another chat, I can't return another chat to this chat"
                 return msg.reply_text(text, parse_mode="markdown")
         except Exception:
-            return msg.reply_text(
-                "There was a problem while importing the data!")
+            return msg.reply_text("There was a problem while importing the data!")
         # Check if backup is from self
         try:
             if str(context.bot.id) != str(data[str(chat.id)]["bot"]):
@@ -164,7 +163,6 @@ def export_data(update, context):
 
     note_list = sql.get_all_chat_notes(chat_id)
     backup = {}
-    notes = {}
     # button = ""
     buttonlist = []
     namacat = ""
@@ -184,38 +182,50 @@ def export_data(update, context):
                 countbtn += 1
                 if btn.same_line:
                     buttonlist.append(
-                        ("{}".format(btn.name), "{}".format(btn.url), True))
+                        ("{}".format(btn.name), "{}".format(btn.url), True)
+                    )
                 else:
                     buttonlist.append(
-                        ("{}".format(btn.name), "{}".format(btn.url), False))
+                        ("{}".format(btn.name), "{}".format(btn.url), False)
+                    )
             isicat += "###button###: {}<###button###>{}<###splitter###>".format(
-                note.value, str(buttonlist))
+                note.value, str(buttonlist)
+            )
             buttonlist.clear()
         elif note.msgtype == 2:
             isicat += "###sticker###:{}<###splitter###>".format(note.file)
         elif note.msgtype == 3:
             isicat += "###file###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value)
+                note.file, note.value
+            )
         elif note.msgtype == 4:
             isicat += "###photo###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value)
+                note.file, note.value
+            )
         elif note.msgtype == 5:
             isicat += "###audio###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value)
+                note.file, note.value
+            )
         elif note.msgtype == 6:
             isicat += "###voice###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value)
+                note.file, note.value
+            )
         elif note.msgtype == 7:
             isicat += "###video###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value)
+                note.file, note.value
+            )
         elif note.msgtype == 8:
             isicat += "###video_note###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value)
+                note.file, note.value
+            )
         else:
             isicat += "{}<###splitter###>".format(note.value)
-    for x in range(count):
-        notes["#{}".format(namacat.split("<###splitter###>")[x])] = "{}".format(
-            isicat.split("<###splitter###>")[x])
+    notes = {
+        "#{}".format(namacat.split("<###splitter###>")[x]): "{}".format(
+            isicat.split("<###splitter###>")[x]
+        )
+        for x in range(count)
+    }
     # Rules
     rules = rulessql.get_rules(chat_id)
     # Blacklist
@@ -283,21 +293,18 @@ def export_data(update, context):
 
     if curr_restr:
         locked_restr = {
-            "messages":
-                curr_restr.messages,
-            "media":
-                curr_restr.media,
-            "other":
-                curr_restr.other,
-            "previews":
-                curr_restr.preview,
-            "all":
-                all([
+            "messages": curr_restr.messages,
+            "media": curr_restr.media,
+            "other": curr_restr.other,
+            "previews": curr_restr.preview,
+            "all": all(
+                [
                     curr_restr.messages,
                     curr_restr.media,
                     curr_restr.other,
                     curr_restr.preview,
-                ]),
+                ]
+            ),
         }
     else:
         locked_restr = {}
@@ -309,9 +316,7 @@ def export_data(update, context):
     backup[chat_id] = {
         "bot": context.bot.id,
         "hashes": {
-            "info": {
-                "rules": rules
-            },
+            "info": {"rules": rules},
             "extra": notes,
             "blacklist": bl,
             "disabled": disabledcmd,
@@ -327,8 +332,9 @@ def export_data(update, context):
     try:
         context.bot.sendMessage(
             JOIN_LOGGER,
-            "*Successfully imported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`"
-            .format(chat.title, chat_id, tgl),
+            "*Successfully imported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`".format(
+                chat.title, chat_id, tgl
+            ),
             parse_mode=ParseMode.MARKDOWN,
         )
     except BadRequest:
