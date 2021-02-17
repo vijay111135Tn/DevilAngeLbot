@@ -22,7 +22,7 @@ from SaitamaRobot import (
     WOLVES,
     INFOPIC,
     dispatcher,
-    sw
+    sw,
 )
 from SaitamaRobot.__main__ import STATS, TOKEN, USER_INFO
 import SaitamaRobot.modules.sql.userinfo_sql as sql
@@ -102,7 +102,6 @@ def hpmanager(user):
     # gbanned users will always have 5% HP from max HP
     # Example: If HP is 100 but gbanned
     # Available HP is 5% of 100 = 5HP
-
 
     # Bad status effects:
     # gbanned users will always have 5% HP from max HP
