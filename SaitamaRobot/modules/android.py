@@ -97,8 +97,8 @@ def device(update, context):
     update.message.reply_text(
         "{}".format(reply), parse_mode=ParseMode.HTML, disable_web_page_preview=True
     )
- 
-       
+
+
 @typing_action
 def twrp(update, context):
     args = context.args
