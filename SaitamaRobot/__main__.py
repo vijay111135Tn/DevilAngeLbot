@@ -19,8 +19,7 @@ from SaitamaRobot import (
     dispatcher,
     StartTime,
     telethn,
-    updater,
-)
+    updater)
 
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
@@ -188,7 +187,7 @@ def start(update: Update, context: CallbackContext):
                     update.effective_chat.id,
                     HELPABLE[mod].__help__,
                     InlineKeyboardMarkup(
-                        [[InlineKeyboardButton(text="Back", callback_data="help_back")]]
+                        [[InlineKeyboardButton(text="Back", callback_data="help_back")]],
                     ),
                 )
             elif args[0].lower() == "markdownhelp":
@@ -212,7 +211,7 @@ def start(update: Update, context: CallbackContext):
             update.effective_message.reply_photo(
                 SAITAMA_IMG,
                 PM_START_TEXT.format(
-                    escape_markdown(first_name), escape_markdown(context.bot.first_name)
+                    escape_markdown(first_name), escape_markdown(context.bot.first_name),
                 ),
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
@@ -222,9 +221,9 @@ def start(update: Update, context: CallbackContext):
                             InlineKeyboardButton(
                                 text="☑️ Add Clara to your group",
                                 url="t.me/{}?startgroup=true".format(
-                                    context.bot.username
+                                    context.bot.username,
                                 ),
-                            )
+                            ),
                         ],
                         [
                             InlineKeyboardButton(
@@ -248,7 +247,7 @@ def start(update: Update, context: CallbackContext):
     else:
         update.effective_message.reply_text(
             "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>".format(
-                uptime
+                uptime,
             ),
             parse_mode=ParseMode.HTML,
         )
@@ -299,7 +298,7 @@ def help_button(update, context):
             module = mod_match.group(1)
             text = (
                 "Here is the help for the *{}* module:\n".format(
-                    HELPABLE[module].__mod_name__
+                    HELPABLE[module].__mod_name__,
                 )
                 + HELPABLE[module].__help__
             )
@@ -308,7 +307,7 @@ def help_button(update, context):
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton(text="Back", callback_data="help_back")]]
+                    [[InlineKeyboardButton(text="Back", callback_data="help_back")]],
                 ),
             )
 
@@ -318,7 +317,7 @@ def help_button(update, context):
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(curr_page - 1, HELPABLE, "help")
+                    paginate_modules(curr_page - 1, HELPABLE, "help"),
                 ),
             )
 
@@ -328,7 +327,7 @@ def help_button(update, context):
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(next_page + 1, HELPABLE, "help")
+                    paginate_modules(next_page + 1, HELPABLE, "help"),
                 ),
             )
 
@@ -337,7 +336,7 @@ def help_button(update, context):
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(0, HELPABLE, "help")
+                    paginate_modules(0, HELPABLE, "help"),
                 ),
             )
 
@@ -366,11 +365,11 @@ def get_help(update: Update, context: CallbackContext):
                             InlineKeyboardButton(
                                 text="Help",
                                 url="t.me/{}?start=ghelp_{}".format(
-                                    context.bot.username, module
+                                    context.bot.username, module,
                                 ),
-                            )
-                        ]
-                    ]
+                            ),
+                        ],
+                    ],
                 ),
             )
             return
@@ -382,9 +381,9 @@ def get_help(update: Update, context: CallbackContext):
                         InlineKeyboardButton(
                             text="Help",
                             url="t.me/{}?start=help".format(context.bot.username),
-                        )
-                    ]
-                ]
+                        ),
+                    ],
+                ],
             ),
         )
         return
@@ -393,7 +392,7 @@ def get_help(update: Update, context: CallbackContext):
         module = args[1].lower()
         text = (
             "Here is the available help for the *{}* module:\n".format(
-                HELPABLE[module].__mod_name__
+                HELPABLE[module].__mod_name__,
             )
             + HELPABLE[module].__help__
         )
@@ -401,7 +400,7 @@ def get_help(update: Update, context: CallbackContext):
             chat.id,
             text,
             InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text="Back", callback_data="help_back")]]
+                [[InlineKeyboardButton(text="Back", callback_data="help_back")]],
             ),
         )
 
@@ -435,10 +434,10 @@ def send_settings(chat_id, user_id, user=False):
             dispatcher.bot.send_message(
                 user_id,
                 text="Which module would you like to check {}'s settings for?".format(
-                    chat_name
+                    chat_name,
                 ),
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)
+                    paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id),
                 ),
             )
         else:
@@ -465,7 +464,7 @@ def settings_button(update: Update, context: CallbackContext):
             module = mod_match.group(2)
             chat = bot.get_chat(chat_id)
             text = "*{}* has the following settings for the *{}* module:\n\n".format(
-                escape_markdown(chat.title), CHAT_SETTINGS[module].__mod_name__
+                escape_markdown(chat.title), CHAT_SETTINGS[module].__mod_name__,
             ) + CHAT_SETTINGS[module].__chat_settings__(chat_id, user.id)
             query.message.reply_text(
                 text=text,
@@ -476,9 +475,9 @@ def settings_button(update: Update, context: CallbackContext):
                             InlineKeyboardButton(
                                 text="Back",
                                 callback_data="stngs_back({})".format(chat_id),
-                            )
-                        ]
-                    ]
+                            ),
+                        ],
+                    ],
                 ),
             )
 
@@ -491,8 +490,8 @@ def settings_button(update: Update, context: CallbackContext):
                 "you're interested in.".format(chat.title),
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(
-                        curr_page - 1, CHAT_SETTINGS, "stngs", chat=chat_id
-                    )
+                        curr_page - 1, CHAT_SETTINGS, "stngs", chat=chat_id,
+                    ),
                 ),
             )
 
@@ -505,8 +504,8 @@ def settings_button(update: Update, context: CallbackContext):
                 "you're interested in.".format(chat.title),
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(
-                        next_page + 1, CHAT_SETTINGS, "stngs", chat=chat_id
-                    )
+                        next_page + 1, CHAT_SETTINGS, "stngs", chat=chat_id,
+                    ),
                 ),
             )
 
@@ -518,7 +517,7 @@ def settings_button(update: Update, context: CallbackContext):
                 "you're interested in.".format(escape_markdown(chat.title)),
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)
+                    paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id),
                 ),
             )
 
@@ -552,11 +551,11 @@ def get_settings(update: Update, context: CallbackContext):
                             InlineKeyboardButton(
                                 text="Settings",
                                 url="t.me/{}?start=stngs_{}".format(
-                                    context.bot.username, chat.id
+                                    context.bot.username, chat.id,
                                 ),
-                            )
-                        ]
-                    ]
+                            ),
+                        ],
+                    ],
                 ),
             )
         else:
@@ -573,7 +572,7 @@ def donate(update: Update, context: CallbackContext):
     bot = context.bot
     if chat.type == "private":
         update.effective_message.reply_text(
-            DONATE_STRING, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True
+            DONATE_STRING, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True,
         )
 
         if OWNER_ID != 254318997 and DONATION_LINK:
@@ -593,11 +592,11 @@ def donate(update: Update, context: CallbackContext):
             )
 
             update.effective_message.reply_text(
-                "I've PM'ed you about donating to my creator!"
+                "I've PM'ed you about donating to my creator!",
             )
         except Unauthorized:
             update.effective_message.reply_text(
-                "Contact me in PM first to get donation information."
+                "Contact me in PM first to get donation information.",
             )
 
 

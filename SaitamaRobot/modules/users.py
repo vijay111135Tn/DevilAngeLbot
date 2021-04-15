@@ -96,7 +96,7 @@ def broadcast(update: Update, context: CallbackContext):
                 except TelegramError:
                     failed_user += 1
         update.effective_message.reply_text(
-            f"Broadcast complete.\nGroups failed: {failed}.\nUsers failed: {failed_user}."
+            f"Broadcast complete.\nGroups failed: {failed}.\nUsers failed: {failed_user}.",
         )
 
 
@@ -121,7 +121,7 @@ def log_user(update: Update, context: CallbackContext):
 
 @run_async
 @sudo_plus
-def chats(update: Update, context: CallbackContext):
+def chats(update: Update, context: CallbackContext): 
     all_chats = sql.get_all_chats() or []
     chatfile = "List of chats.\n0. Chat name | Chat ID | Members count\n"
     P = 1
@@ -131,7 +131,7 @@ def chats(update: Update, context: CallbackContext):
             bot_member = curr_chat.get_member(context.bot.id)
             chat_members = curr_chat.get_members_count(context.bot.id)
             chatfile += "{}. {} | {} | {}\n".format(
-                P, chat.chat_name, chat.chat_id, chat_members
+                P, chat.chat_name, chat.chat_id, chat_members,
             )
             P = P + 1
         except:
@@ -176,7 +176,7 @@ def __migrate__(old_chat_id, new_chat_id):
 __help__ = ""  # no help string
 
 BROADCAST_HANDLER = CommandHandler(
-    ["broadcastall", "broadcastusers", "broadcastgroups"], broadcast
+    ["broadcastall", "broadcastusers", "broadcastgroups"], broadcast,
 )
 USER_HANDLER = MessageHandler(Filters.all & Filters.group, log_user)
 CHAT_CHECKER_HANDLER = MessageHandler(Filters.all & Filters.group, chat_checker)
