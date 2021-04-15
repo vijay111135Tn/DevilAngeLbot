@@ -45,7 +45,7 @@ def magisk(update, context):
 
 
 @typing_action
-def orangefox(update: Update, context: CallbackContext):
+def orangefox(update, context):
     message = update.effective_message
     chat = update.effective_chat
     device = message.text[len("/orangefox ") :]
