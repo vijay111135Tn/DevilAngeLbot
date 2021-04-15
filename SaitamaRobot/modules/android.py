@@ -182,7 +182,7 @@ __mod_name__ = "Android"
 
 MAGISK_HANDLER = DisableAbleCommandHandler("magisk", magisk)
 TWRP_HANDLER = DisableAbleCommandHandler("twrp", twrp, pass_args=True)
-ORANGEFOX_HANDLER = DisableAbleCommandHandler("orangefox", orangefox, run_async=True)
+ORANGEFOX_HANDLER = DisableAbleCommandHandler("orangefox", orangefox, pass_args=True)
 
 dispatcher.add_handler(MAGISK_HANDLER)
 dispatcher.add_handler(TWRP_HANDLER)
