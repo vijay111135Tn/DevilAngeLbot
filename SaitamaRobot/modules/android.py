@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from requests import get
 from telegram import ParseMode
 from telegram.error import BadRequest
+from telegram.ext import run_async
 
 from SaitamaRobot import dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
