@@ -95,6 +95,7 @@ def disapprove(update, context):
     return log_message
 
 
+@run_async
 @user_admin
 @run_async
 def approved(update, context):
@@ -113,6 +114,7 @@ def approved(update, context):
         message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
+@run_async
 @user_admin
 @run_async
 def approval(update, context):
