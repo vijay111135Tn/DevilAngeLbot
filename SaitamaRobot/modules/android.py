@@ -164,6 +164,60 @@ def twrp(update, context):
             disable_web_page_preview=True,
         )
 
+@typing_action
+def orangefox(update, context):
+    message = update.effective_message
+    chat = update.effective_chat
+    device = message.text[len("/orangefox ") :]
+    btn = ""
+
+    if device:
+        link = get(f"https://api.orangefox.download/v3/releases/?codename={device}&sort=date_desc&limit=1")
+
+        if link.status_code == 404:
+            msg = f"OrangeFox recovery is not avaliable for {device}"
+        else:
+            page = loads(link.content)
+            file_id = page["data"][0]["_id"]
+            link = get(f"https://api.orangefox.download/v3/devices/get?codename={device}")
+            page = loads(link.content)
+            oem = page["oem_name"]
+            model = page["model_name"]
+            full_name = page["full_name"]
+            maintainer = page["maintainer"]["username"]
+            link = get(f"https://api.orangefox.download/v3/releases/get?_id={file_id}")
+            page = loads(link.content)
+            dl_file = page["filename"]
+            build_type = page["type"]
+            version = page["version"]
+            changelog = page["changelog"][0]
+            size = str(round(float(page["size"]) / 1024 / 1024, 1)) + "MB"
+            dl_link = page["mirrors"]["DL"]
+            date = datetime.fromtimestamp(page["date"])
+            md5 = page["md5"]
+            msg = f"*Latest OrangeFox Recovery for the {full_name}*\n\n"
+            msg += f"• Manufacturer: `{oem}`\n"
+            msg += f"• Model: `{model}`\n"
+            msg += f"• Codename: `{device}`\n"
+            msg += f"• Build type: `{build_type}`\n"
+            msg += f"• Maintainer: `{maintainer}`\n"
+            msg += f"• Version: `{version}`\n"
+            msg += f"• Changelog: `{changelog}`\n"
+            msg += f"• Size: `{size}`\n"
+            msg += f"• Date: `{date}`\n"
+            msg += f"• File: `{dl_file}`\n"
+            msg += f"• MD5: `{md5}`\n"
+            btn = [[InlineKeyboardButton(text=f"Download", url = dl_link)]]
+    else:
+        msg = 'Give me something to fetch, like:\n`/orangefox a3y17lte`'
+
+#     delmsg = message.reply_text(
+#         text = msg,
+#         reply_markup = InlineKeyboardMarkup(btn),
+#         parse_mode = ParseMode.MARKDOWN,
+#         disable_web_page_preview = True,
+    )
+
 
 __help__ = """
 Get the latest Magsik releases or TWRP for your device!
@@ -178,7 +232,9 @@ __mod_name__ = "Android"
 MAGISK_HANDLER = DisableAbleCommandHandler("magisk", magisk)
 TWRP_HANDLER = DisableAbleCommandHandler("twrp", twrp, pass_args=True)
 DEVICE_HANDLER = DisableAbleCommandHandler("device", device, pass_args=True)
+ORANGEFOX_HANDLER = DisableAbleCommandHandler("orfox",device,pass_args=True)
 
 dispatcher.add_handler(MAGISK_HANDLER)
 dispatcher.add_handler(TWRP_HANDLER)
 dispatcher.add_handler(DEVICE_HANDLER)
+dispatcher.add_handler(ORANGEFOX_HANDLER)
