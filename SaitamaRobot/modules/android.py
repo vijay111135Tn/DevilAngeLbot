@@ -205,12 +205,13 @@ def orangefox(update, context):
             msg += f"• Build type: `{build_type}`\n"
             msg += f"• Maintainer: `{maintainer}`\n"
             msg += f"• Version: `{version}`\n"
-            msg += f"• Changelog: `{changelog}`\n"
+#             msg += f"• Changelog: `{changelog}`\n"
             msg += f"• Size: `{size}`\n"
             msg += f"• Date: `{date}`\n"
             msg += f"• File: `{dl_file}`\n"
             msg += f"• MD5: `{md5}`\n"
             btn = [[InlineKeyboardButton(text=f"Download", url = dl_link)]]
+            btn = [[InlineKeyboardButton(text=f"Changelog", url = changelog)]]
     else:
         msg = 'Enter the device codename to fetch, like:\n`/orangefox mido`'
 
