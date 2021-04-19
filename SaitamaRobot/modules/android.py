@@ -5,6 +5,7 @@ from telegram import ParseMode
 from telegram.error import BadRequest
 from telegram.ext import run_async
 from telegram import Bot, Update, ParseMode, InlineKeyboardMarkup, InlineKeyboardButton
+from ujson import loads
 
 from SaitamaRobot import dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
