@@ -212,7 +212,7 @@ def orangefox(update, context):
             msg += f"• MD5: `{md5}`\n"
             btn = [[InlineKeyboardButton(text=f"Download", url = dl_link)]]
     else:
-        msg = 'Give me something to fetch, like:\n`/orangefox a3y17lte`'
+        msg = 'Enter the device codename to fetch, like:\n`/orangefox mido`'
 
     update.message.reply_text(
         text = msg,
@@ -228,6 +228,7 @@ Get the latest Magsik releases or TWRP for your device!
  × /magisk - Gets the latest magisk release for Stable/Beta/Canary.
  × /device <codename> - Gets android device basic info from its codename.
  × /twrp <codename> -  Gets latest twrp for the android device using the codename.
+ × /orangefox <codename> -  Gets latest orangefox recovery for the android device using the codename.
 """
 
 __mod_name__ = "Android"
