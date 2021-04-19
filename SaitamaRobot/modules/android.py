@@ -211,12 +211,12 @@ def orangefox(update, context):
     else:
         msg = 'Give me something to fetch, like:\n`/orangefox a3y17lte`'
 
-#     delmsg = message.reply_text(
-#         text = msg,
-#         reply_markup = InlineKeyboardMarkup(btn),
-#         parse_mode = ParseMode.MARKDOWN,
-#         disable_web_page_preview = True,
-#    )
+    update.message.reply_text(
+        text = msg,
+        reply_markup = InlineKeyboardMarkup(btn),
+        parse_mode = ParseMode.MARKDOWN,
+        disable_web_page_preview = True,
+   )
 
 
 __help__ = """
