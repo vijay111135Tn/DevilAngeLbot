@@ -31,10 +31,10 @@ from SaitamaRobot import (
     DRAGONS,
     DEMONS,
     TIGERS,
-    WOLVES
+    WOLVES,
 )
 from SaitamaRobot.modules.helper_funcs.alternate import typing_action
-from SaitamaRobot.modules.disable import DisableAbleCommandHandler 
+from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 
 
 @typing_action
@@ -50,16 +50,12 @@ def repo(update, context):
         )
     elif len(args) == 1:
         user = args[0]
-        usr_data = get(
-            f"https://api.github.com/users/{user}/repos?per_page=40"
-        ).json()
+        usr_data = get(f"https://api.github.com/users/{user}/repos?per_page=40").json()
 
         if len(usr_data) != 0:
             reply_text = f"*{user}*" + f"'s" + "* Repos:*\n"
             for i in range(len(usr_data)):
-                reply_text += (
-                    f"× [{usr_data[i]['name']}]({usr_data[i]['html_url']})\n"
-                )
+                reply_text += f"× [{usr_data[i]['name']}]({usr_data[i]['html_url']})\n"
             message.reply_text(
                 reply_text,
                 parse_mode=ParseMode.MARKDOWN,
@@ -73,9 +69,7 @@ def repo(update, context):
     else:
         user, repo = args
         rep_data = get(f"https://api.github.com/repos/{user}/{repo}").json()
-        brc_data = get(
-            f"https://api.github.com/repos/{user}/{repo}/branches"
-        ).json()
+        brc_data = get(f"https://api.github.com/repos/{user}/{repo}/branches").json()
         try:
             text = f"*Repo name:* {rep_data['full_name']}"
             text += f"\n*Language*: {rep_data['language']}"
@@ -168,6 +162,7 @@ def repo(update, context):
                 "*User/Organization not found!* \nMake sure to enter a valid username.",
                 parse_mode=ParseMode.MARKDOWN,
             )
+
 
 __help__ = """
 Some useful git functions to make Github browsing easier and faster.
