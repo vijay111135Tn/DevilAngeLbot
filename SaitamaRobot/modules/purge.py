@@ -1,5 +1,6 @@
 import time
 from telethon import events
+import asyncio
 
 from SaitamaRobot import telethn
 from SaitamaRobot.modules.helper_funcs.telethn.chatstatus import (
