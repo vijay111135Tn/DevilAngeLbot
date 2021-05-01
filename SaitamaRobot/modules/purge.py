@@ -1,6 +1,5 @@
 import time
 from telethon import events
-import asyncio
 
 from SaitamaRobot import telethn
 from SaitamaRobot.modules.helper_funcs.telethn.chatstatus import (
@@ -51,8 +50,7 @@ async def purge_messages(event):
     text = f"Purged Successfully in {time_:0.2f} Second(s)"
     await event.respond(text, parse_mode="markdown")
     
-    await asyncio.sleep(4)
-    await text.delete()
+
 
 
 async def delete_messages(event):
