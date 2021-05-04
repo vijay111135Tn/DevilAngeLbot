@@ -1,40 +1,37 @@
 import html
 import re
-from typing import Optional, List
-from requests import get
 from datetime import datetime
 from html import escape
+from typing import List
+from typing import Optional
 
-from telegram import (
-    Message,
-    Chat,
-    MessageEntity,
-    InlineKeyboardMarkup,
-    InlineKeyboardButton,
-    ParseMode,
-    ChatAction,
-    TelegramError,
-)
-from telegram.ext import CommandHandler, CallbackQueryHandler, Filters
-from telegram.utils.helpers import (
-    escape_markdown,
-    mention_html,
-    mention_markdown,
-)
+from requests import get
+from telegram import Chat
+from telegram import ChatAction
+from telegram import InlineKeyboardButton
+from telegram import InlineKeyboardMarkup
+from telegram import Message
+from telegram import MessageEntity
+from telegram import ParseMode
+from telegram import TelegramError
 from telegram.error import BadRequest
+from telegram.ext import CallbackQueryHandler
+from telegram.ext import CommandHandler
+from telegram.ext import Filters
+from telegram.utils.helpers import escape_markdown
+from telegram.utils.helpers import mention_html
+from telegram.utils.helpers import mention_markdown
 
-from SaitamaRobot import (
-    dispatcher,
-    OWNER_ID,
-    TOKEN,
-    DEV_USERS,
-    DRAGONS,
-    DEMONS,
-    TIGERS,
-    WOLVES
-)
+from SaitamaRobot import DEMONS
+from SaitamaRobot import DEV_USERS
+from SaitamaRobot import dispatcher
+from SaitamaRobot import DRAGONS
+from SaitamaRobot import OWNER_ID
+from SaitamaRobot import TIGERS
+from SaitamaRobot import TOKEN
+from SaitamaRobot import WOLVES
+from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from SaitamaRobot.modules.helper_funcs.alternate import typing_action
-from SaitamaRobot.modules.disable import DisableAbleCommandHandler 
 
 
 @typing_action
@@ -50,16 +47,12 @@ def repo(update, context):
         )
     elif len(args) == 1:
         user = args[0]
-        usr_data = get(
-            f"https://api.github.com/users/{user}/repos?per_page=40"
-        ).json()
+        usr_data = get(f"https://api.github.com/users/{user}/repos?per_page=40").json()
 
         if len(usr_data) != 0:
             reply_text = f"*{user}*" + f"'s" + "* Repos:*\n"
             for i in range(len(usr_data)):
-                reply_text += (
-                    f"× [{usr_data[i]['name']}]({usr_data[i]['html_url']})\n"
-                )
+                reply_text += f"× [{usr_data[i]['name']}]({usr_data[i]['html_url']})\n"
             message.reply_text(
                 reply_text,
                 parse_mode=ParseMode.MARKDOWN,
@@ -73,9 +66,7 @@ def repo(update, context):
     else:
         user, repo = args
         rep_data = get(f"https://api.github.com/repos/{user}/{repo}").json()
-        brc_data = get(
-            f"https://api.github.com/repos/{user}/{repo}/branches"
-        ).json()
+        brc_data = get(f"https://api.github.com/repos/{user}/{repo}/branches").json()
         try:
             text = f"*Repo name:* {rep_data['full_name']}"
             text += f"\n*Language*: {rep_data['language']}"
@@ -168,6 +159,7 @@ def repo(update, context):
                 "*User/Organization not found!* \nMake sure to enter a valid username.",
                 parse_mode=ParseMode.MARKDOWN,
             )
+
 
 __help__ = """
 Some useful git functions to make Github browsing easier and faster.
