@@ -2,16 +2,17 @@ import html
 import random
 import time
 
-import SaitamaRobot.modules.fun_strings as fun_strings
-from SaitamaRobot import dispatcher
-from SaitamaRobot.modules.disable import DisableAbleCommandHandler
-from SaitamaRobot.modules.helper_funcs.chat_status import is_user_admin
-from SaitamaRobot.modules.helper_funcs.extraction import extract_user
 from telegram import ChatPermissions, ParseMode, Update
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, run_async
-from SaitamaRobot.modules.helper_funcs.alternate import typing_action
 from telegram.utils.helpers import escape_markdown
+
+import SaitamaRobot.modules.fun_strings as fun_strings
+from SaitamaRobot import dispatcher
+from SaitamaRobot.modules.disable import DisableAbleCommandHandler
+from SaitamaRobot.modules.helper_funcs.alternate import typing_action
+from SaitamaRobot.modules.helper_funcs.chat_status import is_user_admin
+from SaitamaRobot.modules.helper_funcs.extraction import extract_user
 
 GIFS = [
     "https://media.tenor.com/images/fb1dcc715d7c639efb01ec09e79c29be/tenor.gif",
