@@ -11,9 +11,9 @@ from telegram.utils.helpers import mention_html
 from telegram.error import BadRequest
 
 
+@run_async
 @loggable
 @user_admin
-@run_async
 def approve(update, context):
     message = update.effective_message
     chat_title = message.chat.title
@@ -56,9 +56,9 @@ def approve(update, context):
     return log_message
 
 
+@run_async
 @loggable
 @user_admin
-@run_async
 def disapprove(update, context):
     message = update.effective_message
     chat_title = message.chat.title
@@ -94,10 +94,9 @@ def disapprove(update, context):
 
     return log_message
 
-
 @run_async
+@loggable
 @user_admin
-@run_async
 def approved(update, context):
     message = update.effective_message
     chat_title = message.chat.title
@@ -115,8 +114,8 @@ def approved(update, context):
 
 
 @run_async
+@loggable
 @user_admin
-@run_async
 def approval(update, context):
     message = update.effective_message
     chat = update.effective_chat
