@@ -13,7 +13,12 @@ from telegram.ext import CallbackContext, run_async
 from SaitamaRobot.modules.helper_funcs.alternate import typing_action
 from telegram.utils.helpers import escape_markdown
 
-GIFS = ["https://media.tenor.com/images/fb1dcc715d7c639efb01ec09e79c29be/tenor.gif","https://media.tenor.com/images/fb906786487531f002f72b03cc517de3/tenor.gif","https://cdn.dribbble.com/users/1018201/screenshots/10813441/media/9454184869dfcc1e62623d4cdeae7287.gif","https://media.tenor.com/images/fc96f1e43364668f6d784e836f7bdaaa/tenor.gif"]
+GIFS = [
+    "https://media.tenor.com/images/fb1dcc715d7c639efb01ec09e79c29be/tenor.gif",
+    "https://media.tenor.com/images/fb906786487531f002f72b03cc517de3/tenor.gif",
+    "https://cdn.dribbble.com/users/1018201/screenshots/10813441/media/9454184869dfcc1e62623d4cdeae7287.gif",
+    "https://media.tenor.com/images/fc96f1e43364668f6d784e836f7bdaaa/tenor.gif",
+]
 
 
 @run_async
@@ -103,7 +108,7 @@ def slap(update: Update, context: CallbackContext):
 
 @run_async
 @typing_action
-def hug(update : Update, context : CallbackContext):
+def hug(update: Update, context: CallbackContext):
     args = context.args
     msg = update.effective_message  # type: Optional[Message]
 
