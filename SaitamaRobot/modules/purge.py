@@ -1,16 +1,29 @@
-import time
+from SaitamaRobot import telethn, DRAGONS, OWNER_ID, DEV_USERS, WOLVES, TIGERS, DEMONS
 
+import asyncio
 from telethon import events
-
-from SaitamaRobot import telethn
+from telethon.tl.types import ChannelParticipantsAdmins
+from telethon.errors.rpcerrorlist import MessageDeleteForbiddenError
 from SaitamaRobot.modules.helper_funcs.telethn.chatstatus import can_delete_messages
 from SaitamaRobot.modules.helper_funcs.telethn.chatstatus import user_is_admin
 
+ #Check if user has admin rights
 
-async def purge_messages(event):
-    start = time.perf_counter()
-    if event.from_id is None:
-        return
+
+#async def is_administrator(user_id: int, message):
+    #admin = False
+    #async for user in telethn.iter_participants(
+        #message.chat_id, filter=ChannelParticipantsAdmins
+    #):
+        #if user_id == user_is_admin or can_delete_messages:
+            #admin = True
+            #break
+    #return admin
+
+
+async def purge(event):
+    chat = event.chat_id
+    msgs = []
 
     if (
         not await user_is_admin(
@@ -22,35 +35,43 @@ async def purge_messages(event):
         await event.reply("Only Admins are allowed to use this command")
         return
 
-    if not await can_delete_messages(message=event):
-        await event.reply("Can't seem to purge the message")
+    msg = await event.get_reply_message()
+    if not msg:
+        await event.reply(
+            "Reply to a message to select where to start purging from."
+        )
         return
-
-    reply_msg = await event.get_reply_message()
-    if not reply_msg:
-        await event.reply("Reply to a message to select where to start purging from.")
-        return
-    messages = []
-    message_id = reply_msg.id
-    delete_to = event.message.id
-
-    messages.append(event.reply_to_msg_id)
-    for msg_id in range(message_id, delete_to + 1):
-        messages.append(msg_id)
-        if len(messages) == 100:
-            await event.client.delete_messages(event.chat_id, messages)
-            messages = []
 
     try:
-        await event.client.delete_messages(event.chat_id, messages)
-    except:
-        pass
-    time_ = time.perf_counter() - start
-    text = f"Purged Successfully in {time_:0.2f} Second(s)"
-    await event.respond(text, parse_mode="markdown")
+        msg_id = msg.id
+        count = 0
+        to_delete = event.message.id - 1
+        await event.client.delete_messages(chat, event.message.id)
+        msgs.append(event.reply_to_msg_id)
+        for m_id in range(to_delete, msg_id - 1, -1):
+            msgs.append(m_id)
+            count += 1
+            if len(msgs) == 100:
+                await event.client.delete_messages(chat, msgs)
+                msgs = []
+
+        await event.client.delete_messages(chat, msgs)
+        del_res = await event.client.send_message(
+            event.chat_id, f"Purged {count} messages."
+        )
+
+        await asyncio.sleep(2)
+        await del_res.delete()
+
+    except MessageDeleteForbiddenError:
+        text = "Failed to delete messages.\n"
+        text += "Selected messages may be too old or you haven't given me enough admin rights!"
+        del_res = await event.respond(text, parse_mode="md")
+        await asyncio.sleep(5)
+        await del_res.delete()
 
 
-async def delete_messages(event):
+async def delete_msg(event):
     if event.from_id is None:
         return
 
@@ -78,18 +99,16 @@ async def delete_messages(event):
 
 
 __help__ = """
+Deleting a selected amount of messages are easy with this command. \
+Bot purges messages all together or individually.
 *Admin only:*
- - /del: deletes the message you replied to
- - /purge: deletes all messages between this and the replied to message.
- - /purge <integer X>: deletes the replied message, and X messages following it if replied to a message.
+ × /del: Deletes the message you replied to.
+ × /purge: Deletes all messages between this and the replied to message.
 """
-
-PURGE_HANDLER = purge_messages, events.NewMessage(pattern="^[!/]purge$")
-DEL_HANDLER = delete_messages, events.NewMessage(pattern="^[!/]del$")
+PURGE_HANDLER = purge, events.NewMessage(pattern="^[!/]purge$")
+DEL_HANDLER = delete_msg, events.NewMessage(pattern="^[!/]del$")
 
 telethn.add_event_handler(*PURGE_HANDLER)
 telethn.add_event_handler(*DEL_HANDLER)
 
 __mod_name__ = "Purges"
-__command_list__ = ["del", "purge"]
-__handlers__ = [PURGE_HANDLER, DEL_HANDLER]
