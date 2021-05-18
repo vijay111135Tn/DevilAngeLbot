@@ -2,18 +2,27 @@ import html
 import random
 import time
 
+from telegram import ChatPermissions
+from telegram import ParseMode
+from telegram import Update
+from telegram.error import BadRequest
+from telegram.ext import CallbackContext
+from telegram.ext import run_async
+from telegram.utils.helpers import escape_markdown
+
 import SaitamaRobot.modules.fun_strings as fun_strings
 from SaitamaRobot import dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
+from SaitamaRobot.modules.helper_funcs.alternate import typing_action
 from SaitamaRobot.modules.helper_funcs.chat_status import is_user_admin
 from SaitamaRobot.modules.helper_funcs.extraction import extract_user
-from telegram import ChatPermissions, ParseMode, Update
-from telegram.error import BadRequest
-from telegram.ext import CallbackContext, run_async
-from SaitamaRobot.modules.helper_funcs.alternate import typing_action
-from telegram.utils.helpers import escape_markdown
 
-GIFS = ["https://media.tenor.com/images/fb1dcc715d7c639efb01ec09e79c29be/tenor.gif","https://media.tenor.com/images/fb906786487531f002f72b03cc517de3/tenor.gif","https://cdn.dribbble.com/users/1018201/screenshots/10813441/media/9454184869dfcc1e62623d4cdeae7287.gif","https://media.tenor.com/images/fc96f1e43364668f6d784e836f7bdaaa/tenor.gif"]
+GIFS = [
+    "https://media.tenor.com/images/fb1dcc715d7c639efb01ec09e79c29be/tenor.gif",
+    "https://media.tenor.com/images/fb906786487531f002f72b03cc517de3/tenor.gif",
+    "https://cdn.dribbble.com/users/1018201/screenshots/10813441/media/9454184869dfcc1e62623d4cdeae7287.gif",
+    "https://media.tenor.com/images/fc96f1e43364668f6d784e836f7bdaaa/tenor.gif",
+]
 
 
 @run_async
@@ -103,7 +112,7 @@ def slap(update: Update, context: CallbackContext):
 
 @run_async
 @typing_action
-def hug(update : Update, context : CallbackContext):
+def hug(update: Update, context: CallbackContext):
     args = context.args
     msg = update.effective_message  # type: Optional[Message]
 

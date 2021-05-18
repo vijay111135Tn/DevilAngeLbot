@@ -1,26 +1,31 @@
-from SaitamaRobot import telethn, DRAGONS, OWNER_ID, DEV_USERS, WOLVES, TIGERS, DEMONS
-
 import asyncio
+
 from telethon import events
-from telethon.tl.types import ChannelParticipantsAdmins
 from telethon.errors.rpcerrorlist import MessageDeleteForbiddenError
+from telethon.tl.types import ChannelParticipantsAdmins
+
+from SaitamaRobot import DEMONS
+from SaitamaRobot import DEV_USERS
+from SaitamaRobot import DRAGONS
+from SaitamaRobot import OWNER_ID
+from SaitamaRobot import telethn
+from SaitamaRobot import TIGERS
+from SaitamaRobot import WOLVES
 from SaitamaRobot.modules.helper_funcs.telethn.chatstatus import can_delete_messages
 from SaitamaRobot.modules.helper_funcs.telethn.chatstatus import user_is_admin
 
- #Check if user has admin rights
 
+# Check if user has admin rights
 
-#async def is_administrator(user_id: int, message):
-    #admin = False
-    #async for user in telethn.iter_participants(
-        #message.chat_id, filter=ChannelParticipantsAdmins
-    #):
-        #if user_id == user_is_admin or can_delete_messages:
-            #admin = True
-            #break
-    #return admin
-
-
+# async def is_administrator(user_id: int, message):
+# admin = False
+# async for user in telethn.iter_participants(
+# message.chat_id, filter=ChannelParticipantsAdmins
+# ):
+# if user_id == user_is_admin or can_delete_messages:
+# admin = True
+# break
+# return admin
 async def purge(event):
     chat = event.chat_id
     msgs = []
@@ -37,9 +42,7 @@ async def purge(event):
 
     msg = await event.get_reply_message()
     if not msg:
-        await event.reply(
-            "Reply to a message to select where to start purging from."
-        )
+        await event.reply("Reply to a message to select where to start purging from.")
         return
 
     try:
