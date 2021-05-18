@@ -254,7 +254,6 @@ def start(update: Update, context: CallbackContext):
                                 text="📕 Help & Commands",
                                 url="http://t.me/MissClaraBot?start=help",
                             )
-                            
                         ],
                     ]
                 ),
