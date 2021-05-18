@@ -5,18 +5,25 @@ RUN_STRINGS = (
     "Look out for the wall!",
     "Don't leave me alone with them!!",
     "You've got company!",
-    "Chotto matte!",
     "Yare yare daze",
-    "*Naruto run activated*",
     "*Nezuko run activated*",
     "Hey take responsibilty for what you just did!",
     "May the odds be ever in your favour.",
     "Run everyone, they just dropped a bomb 💣💣",
     "And they disappeared forever, never to be seen again.",
-    "Legend has it, they're still running.",
+    "Legend has it, they're still running...",
     "Hasta la vista, baby.",
     "Ah, what a waste. I liked that one.",
+    "Run. Because zombies will eat the untrained ones first.",
     "As The Doctor would say... RUN!",
+    "I'd run faster if I were you.",
+    "Yeah yeah, just tap /kickme already.",
+    "I'm behind you...",
+    "NO RUNNING IN THE HALLWAYS!",
+    "Act like a horse. Be dumb. Just run.",
+    "Life is short. Running makes it seem longer.",
+    "That awkward moment when you’re wearing Nike and you just can’t do it…",
+    "A long time ago, in a galaxy far far away... Someone would've cared about that. Not anymore though."
 )
 
 GIFS = [
@@ -144,43 +151,15 @@ SLAP_TEMPLATES = (
     "Goblin slayer slays {user2}",  # Goblin Slayer
 )
 
-PAT_TEMPLATES = (
-    "{user1} pats {user2} on the head.",
-    "*gently rubs {user2}'s head*.",
-    "*{user1} mofumofus {user2}'s head*",
-    "*{user1} messes up {user2}'s head*",
-    "*{user1} intensly rubs {user2}'s head*",
-    "*{user2}'s waifu pats their head*",
-    "*{user2}'s got free headpats*",
-    "No pats for {user2}!",
-    "Oh no! We are all out of pats.",
-    "This is a designated no pat zone!",
-    "No pats for {user2}!",
-    "{user1} spoils {user2} with headpats!",
-    "{user2} received one free headpat!",
-    "{user1} headpats {user2} whilst giving a lap pillow",
-    "{user1} aggressively pats {user2}",
-    "{user1} gently strokes {user2}'s head",
-    "Pat, pat, pat, pat",
-    "{user2} could not escape {user1}'s headpats",
-    "{user2}.exe has stopped working",
-    "{user1} rubs {user2} on the neck",
-    "Must... extort... HEADPATS",
-    "{user1} headpats {user2}'s head with a pat",
-    "{user1} pats {user2} unexpectedly",
-    "{user1} pats {user2} with consent, maybe?",
-    "Pat pat, {user2} honto kawaii ne!",
-    "{user1} headpats {user2} at 420apm",
-    "{user1} bellyrubs {user2}",
-    "{user1} pats {user2} friendlily",
-    "{user2} uses HEADPATS? O KAWAII KOTO",
-    "*headpats.gif intensifies for {user2}*",
-    "(*´ω´(*｀ω｀)",
-    "(ｏ・_・)ノ”(ᴗ_ ᴗ。)",
-    "(*￣▽￣)ノ”(- -*)",
-    "(っ´ω`)ﾉ(╥ω╥)",
-    "( ´Д｀)ﾉ(´･ω･`) ﾅﾃﾞﾅﾃﾞ",
+HUG_TEMPLATES = (
+    "{user1} {hug} {user2}.",
+    "{user1} {hug} {user2} warmly.",
+    "{user1} {hug} {user2} with a love. 💘",
+    "{user1} {hug} {user2} with kindness.",
+    "{user1} gave {user2} a {hug} and took her hand."
 )
+
+HUG = ("hugs", "hugged", "kissed", "pinches","adore")
 
 PAT_GIFS = (
     "CgACAgQAAxkBAALRX19Xs7tBdOH1gQwS_rglVRkTbgVYAAKEAgACmQn9UWlyGa_xy9_aGwQ",
