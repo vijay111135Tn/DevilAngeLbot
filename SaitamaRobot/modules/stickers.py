@@ -14,6 +14,10 @@ from telegram.utils.helpers import mention_html
 from SaitamaRobot import dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 
+import cloudscraper
+
+scrapper = cloudscraper.create_scraper()
+
 combot_stickers_url = "https://combot.org/telegram/stickers?q="
 
 
@@ -45,7 +49,7 @@ def cb_sticker(update: Update, context: CallbackContext):
     if len(split) == 1:
         msg.reply_text("Provide some name to search for pack.")
         return
-    text = requests.get(combot_stickers_url + split[1]).text
+    text = scrapper.get(combot_stickers_url + split[1]).text
     soup = bs(text, "lxml")
     results = soup.find_all("a", {"class": "sticker-pack__btn"})
     titles = soup.find_all("div", "sticker-pack__title")
