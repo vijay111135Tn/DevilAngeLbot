@@ -347,6 +347,10 @@ def new_member(update: Update, context: CallbackContext):
                         chatname=escape_markdown(chat.title),
                         id=new_mem.id,
                     )
+                    if "%%%" in res:
+                        split = res.split("%%%")
+                        if all(split):
+                            res = random.choice(split)
 
                 else:
                     res = random.choice(sql.DEFAULT_WELCOME_MESSAGES).format(
