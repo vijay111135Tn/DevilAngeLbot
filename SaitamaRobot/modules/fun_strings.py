@@ -159,7 +159,7 @@ HUG_TEMPLATES = (
     "{user1} gave {user2} a {hug} and took her hand.",
 )
 
-HUG = ("hugs", "hugged", "kissed", "pinches", "adore")
+HUG = ("hugs", "hugged", "kissed", "pinches")
 
 PAT_GIFS = (
     "CgACAgQAAxkBAALRX19Xs7tBdOH1gQwS_rglVRkTbgVYAAKEAgACmQn9UWlyGa_xy9_aGwQ",
