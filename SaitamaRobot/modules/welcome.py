@@ -1068,7 +1068,19 @@ WELC_HELP_TXT = (
     "go. Note that group ids are usually preceded by a `-` sign; this is required, so please don't "
     "remove it.\n"
     "You can even set images/gifs/videos/voice messages as the welcome message by "
-    "replying to the desired media, and calling `/setwelcome`."
+    "replying to the desired media, and calling `/setwelcome`.\n"
+    "To *display random strings* on welcome; just add strings seperated by `%%%` \n"
+    "For example :\n"
+    "Heyy \n"
+    "`%%%` \n"
+    "Hello \n"
+    "This will randomly choose either 'Heyy' or 'Hello' when someone joins. \n"
+    "You can also tokens like `{first}`, `{mention}`, `{id}` etc.. in those strings.\n"
+    "An example welcome messsage is:\n"
+    "`/setwelcome`\n"
+    "`Hey {mention} welcome to the chat!` \n"
+    "`%%%` \n"
+    "`Welcome {first}` \n"
 )
 
 WELC_MUTE_HELP_TXT = (
