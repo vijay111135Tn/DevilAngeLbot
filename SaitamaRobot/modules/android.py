@@ -22,7 +22,7 @@ DEVICES_DATA = "https://raw.githubusercontent.com/androidtrackers/certified-andr
 
 @typing_action
 def magisk(update, context):
-    url = "https://raw.githubusercontent.com/topjohnwu/magisk_files/"
+    url = "https://raw.githubusercontent.com/topjohnwu/magisk-files/"
     releases = ""
     for type, branch in {
         "Stable": ["master/stable", "master"],
