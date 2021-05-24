@@ -38,7 +38,7 @@ def magisk(update, context):
             releases += (
                 f"*{type}*: \n"
                 f'• App - [{data["magisk"]["version"]}-{data["magisk"]["versionCode"]}]({data["magisk"]["link"]}) - [Changelog]({data["magisk"]["note"]})\n'
-                f'\n Now magisk is packed as all in one, refer [this installation](https://topjohnwu.github.io/Magisk/install.html) procedure for more info.\n'
+                f"\n Now magisk is packed as all in one, refer [this installation](https://topjohnwu.github.io/Magisk/install.html) procedure for more info.\n"
             )
 
     update.message.reply_text(
