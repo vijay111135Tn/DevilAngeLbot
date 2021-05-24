@@ -26,23 +26,19 @@ def magisk(update, context):
     releases = ""
     for type, branch in {
         "Stable": ["master/stable", "master"],
-        "Beta": ["master/beta", "master"],
         "Canary": ["canary/canary", "canary"],
     }.items():
         data = get(url + branch[0] + ".json").json()
         if type != "Canary":
             releases += (
                 f"*{type}*: \n"
-                f'• Zip - [{data["magisk"]["version"]}-{data["magisk"]["versionCode"]}]({data["magisk"]["link"]}) - [Changelog]({data["magisk"]["note"]})\n'
-                f'• App - [{data["app"]["version"]}-{data["app"]["versionCode"]}]({data["app"]["link"]}) - [Changelog]({data["app"]["note"]})\n'
-                f'• Uninstaller - [{data["magisk"]["version"]}-{data["magisk"]["versionCode"]}]({data["uninstaller"]["link"]})\n\n'
+                f'• App - [{data["magisk"]["version"]}-{data["magisk"]["versionCode"]}]({data["magisk"]["link"]}) - [Changelog]({data["magisk"]["note"]})\n \n'
             )
         else:
             releases += (
                 f"*{type}*: \n"
-                f'• Zip - [{data["magisk"]["version"]}-{data["magisk"]["versionCode"]}]({url}{branch[1]}/{data["magisk"]["link"]}) - [Changelog]({url}{branch[1]}/{data["magisk"]["note"]})\n'
-                f'• App - [{data["app"]["version"]}-{data["app"]["versionCode"]}]({url}{branch[1]}/{data["app"]["link"]}) - [Changelog]({url}{branch[1]}/{data["app"]["note"]})\n'
-                f'• Uninstaller - [{data["magisk"]["version"]}-{data["magisk"]["versionCode"]}]({url}{branch[1]}/{data["uninstaller"]["link"]})\n\n'
+                f'• App - [{data["magisk"]["version"]}-{data["magisk"]["versionCode"]}]({data["magisk"]["link"]}) - [Changelog]({data["magisk"]["note"]})\n'
+                f'\n Now magisk is packed as all in one, refer [this installation](https://topjohnwu.github.io/Magisk/install.html) procedure for more info.\n'
             )
 
     update.message.reply_text(
