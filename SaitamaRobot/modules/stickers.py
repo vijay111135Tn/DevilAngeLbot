@@ -13,6 +13,7 @@ from telegram.utils.helpers import mention_html
 
 from SaitamaRobot import dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
+from SaitamaRobot.modules.helper_funcs.alternate import typing_action
 
 import cloudscraper
 
@@ -80,6 +81,7 @@ def getsticker(update: Update, context: CallbackContext):
 
 
 @run_async
+@typing_action
 def kang(update: Update, context: CallbackContext):
     msg = update.effective_message
     user = update.effective_user
