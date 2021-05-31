@@ -151,24 +151,65 @@ SLAP_TEMPLATES = (
     "Goblin slayer slays {user2}",  # Goblin Slayer
 )
 
+PAT_TEMPLATES = (
+    "{user1} pats {user2} on the head.",
+    "*gently rubs {user2}'s head*.",
+    "*{user1} mofumofus {user2}'s head*",
+    "*{user1} messes up {user2}'s head*",
+    "*{user1} intensly rubs {user2}'s head*",
+    "*{user2}'s waifu pats their head*",
+    "*{user2}'s got free headpats*",
+    "No pats for {user2}!",
+    "Oh no! We are all out of pats.",
+    "This is a designated no pat zone!",
+    "No pats for {user2}!",
+    "{user1} spoils {user2} with headpats!",
+    "{user2} received one free headpat!",
+    "{user1} headpats {user2} whilst giving a lap pillow",
+    "{user1} aggressively pats {user2}",
+    "{user1} gently strokes {user2}'s head",
+    "Pat, pat, pat, pat",
+    "{user2} could not escape {user1}'s headpats",
+    "{user2}.exe has stopped working",
+    "{user1} rubs {user2} on the neck",
+    "Must... extort... HEADPATS",
+    "{user1} headpats {user2}'s head with a pat",
+    "{user1} pats {user2} unexpectedly",
+    "{user1} pats {user2} with consent, maybe?",
+    "Pat pat, {user2} honto kawaii ne!",
+    "{user1} headpats {user2} at 420apm",
+    "{user1} bellyrubs {user2}",
+    "{user1} pats {user2} friendlily",
+    "{user2} uses HEADPATS? O KAWAII KOTO",
+    "*headpats.gif intensifies for {user2}*",
+    "(*´ω´(*｀ω｀)",
+    "(ｏ・_・)ノ”(ᴗ_ ᴗ。)",
+    "(*￣▽￣)ノ”(- -*)",
+    "(っ´ω`)ﾉ(╥ω╥)",
+    "( ´Д｀)ﾉ(´･ω･`) ﾅﾃﾞﾅﾃﾞ",
+)
+
 HUG_TEMPLATES = (
     "{user1} {hug} {user2}.",
     "{user1} {hug} {user2} warmly.",
     "{user1} {hug} {user2} with a love. 💘",
     "{user1} {hug} {user2} with kindness.",
-    "{user1} gave {user2} a {hug} and took her hand.",
+    "{user1} gave {user2} a kiss and took her hand.",
 )
 
 HUG = ("hugs", "hugged", "kissed", "pinches")
 
 PAT_GIFS = (
-    "CgACAgQAAxkBAALRX19Xs7tBdOH1gQwS_rglVRkTbgVYAAKEAgACmQn9UWlyGa_xy9_aGwQ",
-    "CgACAgEAAxkBAALRYF9Xs8EnhsDfDpld3ILoqTbzDmwxAAJFAAOJxjlHECanwn69E5QbBA",
+    "https://media1.tenor.com/images/16ec668d63ac6c1e8a1635b855cb1654/tenor.gif?itemid=14623443",
+    "https://media1.tenor.com/images/54722063c802bac30d928db3bf3cc3b4/tenor.gif?itemid=8841561",
+    "https://media1.tenor.com/images/af65d19365bc7db7f79a1abed92fb906/tenor.gif?itemid=7234384",
+    "https://media1.tenor.com/images/9bd2eb038544102aa4bb36fb8b0d01f9/tenor.gif?itemid=12437651",
 )
 
 PAT_STICKERS = (
     "CAACAgQAAxkBAALRWV9Xs4HH0XaXfhZe-jWaZoXfs-IsAAJYAwACdDgSEHYOt4KvL02oGwQ",
     "CAACAgQAAxkBAALRXF9Xs6XmIeDbnoL1wiDky0TdX-CvAAKKAQAC1TMzC9A3CtiT2rqVGwQ",
+    "CAACAgUAAx0EWUJksgAC1flgtJfJqSp8AlCbhnhDqJL-oXOftAACDQIAAh0iqFYUerG--EFgRx8E",
 )
 
 PING_STRING = (
