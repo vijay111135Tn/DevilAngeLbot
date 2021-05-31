@@ -194,7 +194,8 @@ def pat(update: Update, context: CallbackContext):
     if pat_type == "Text":
         temp = random.choice(fun_strings.PAT_TEMPLATES)
         reply = temp.format(user1=user1, user2=user2)
-        reply_to.reply_text(reply, parse_mode=ParseMode.HTML)    
+        reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
+
 
 @run_async
 def roll(update: Update, context: CallbackContext):
