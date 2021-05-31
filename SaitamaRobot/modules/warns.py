@@ -123,8 +123,14 @@ def warn(
             [
                 [
                     InlineKeyboardButton(
-                        "🔘 Remove warn, Admins Only!",
+                        " Remove warn, Admins Only!",
                         callback_data="rm_warn({})".format(user.id),
+                    ),
+                ],
+                [
+                    InlineKeyboardButton(
+                        text = "Rules",
+                        url =f"t.me/{dispatcher.bot.username}?start={chat.id}",
                     ),
                 ],
             ],
