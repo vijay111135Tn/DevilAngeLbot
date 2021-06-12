@@ -26,6 +26,10 @@ from SaitamaRobot.modules.helper_funcs.telethn.chatstatus import user_is_admin
 # admin = True
 # break
 # return admin
+
+# Based on SkyleeBot
+# Thanks to Starry
+# Thanks to Sensipeeps Org
 async def purge(event):
     chat = event.chat_id
     msgs = []
