@@ -189,7 +189,7 @@ PAT_TEMPLATES = (
     "( ´Д｀)ﾉ(´･ω･`) ﾅﾃﾞﾅﾃﾞ",
 )
 
-#Credits: SkyleeBot & Starry
+# Credits: SkyleeBot & Starry
 HUG_TEMPLATES = (
     "{user1} {hug} {user2}.",
     "{user1} {hug} {user2} warmly.",
@@ -198,7 +198,7 @@ HUG_TEMPLATES = (
     "{user1} gave {user2} a kiss and took her hand.",
 )
 
-#Credits: SkyleeBot & Starry
+# Credits: SkyleeBot & Starry
 HUG = ("hugs", "hugged", "kissed", "pinches")
 
 PAT_GIFS = (
