@@ -167,7 +167,7 @@ def twrp(update, context):
             disable_web_page_preview=True,
         )
 
-
+# Picked from AstrakoBot; Thanks to them!
 @typing_action
 def orangefox(update, context):
     message = update.effective_message
