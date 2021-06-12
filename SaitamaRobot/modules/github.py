@@ -1,3 +1,7 @@
+# Thanks to Austin Hornhead
+# Picked from Perry
+# Also credits : Sensipeeps Org
+
 import html
 import re
 from datetime import datetime
@@ -161,15 +165,6 @@ def repo(update, context):
             )
 
 
-__help__ = """
-Some useful git functions to make Github browsing easier and faster.
-× /repo <username>: Displays a list of hyperlinked public repos by a user on Github.
-× /repo <username> <repo>: Get stats on a public repo.
-
-Creds : https://github.com/marchingon12/Perry
-"""
-
-__mod_name__ = "GitHub"
 
 REPO_HANDLER = CommandHandler("repo", repo, pass_args=True)
 
