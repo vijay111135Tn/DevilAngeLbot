@@ -109,7 +109,7 @@ def slap(update: Update, context: CallbackContext):
 
     reply_text(reply, parse_mode=ParseMode.HTML)
 
-
+# Credits: SkyleeBot & Starry
 @run_async
 @typing_action
 def hug(update: Update, context: CallbackContext):
