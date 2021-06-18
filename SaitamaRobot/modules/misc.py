@@ -114,7 +114,7 @@ Output: `1.0 USD = 75.505 INR`
 • 🕐 [Timezones list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
 *Some useful git functions to make Github browsing easier and faster:*
-*Credits : Perry*
+*Credits : Austin Hornhead*
 • `/repo <username>`*:* Displays a list of hyperlinked public repos by a user on Github.
 • `/repo <username> <repo>`*:* Get stats on a public repo.
 
