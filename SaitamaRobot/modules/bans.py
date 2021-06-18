@@ -266,23 +266,36 @@ def punch(update: Update, context: CallbackContext) -> str:
 
     res = chat.unban_member(user_id)  # unban on current user = kick
     if res:
+
+        if message.text.startswith("/s"):
+            silent = True
+            if not can_delete(chat, context.bot.id):
+                return ""
+        else:
+            silent = False
+
+        if silent:
+            if message.reply_to_message:
+                message.reply_to_message.delete()
+            message.delete()
+
         # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
-        bot.sendMessage(
-            chat.id,
-            f"Kicked {mention_html(member.user.id, html.escape(member.user.first_name))} out of the group!",
-            parse_mode=ParseMode.HTML,
-        )
-        log = (
-            f"<b>{html.escape(chat.title)}:</b>\n"
-            f"#KICKED\n"
-            f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
-            f"<b>User:</b> {mention_html(member.user.id, html.escape(member.user.first_name))}"
-        )
-        if reason:
-            log += f"\n<b>Reason:</b> {reason}"
+        else:
+            bot.sendMessage(
+                chat.id,
+                f"Kicked {mention_html(member.user.id, html.escape(member.user.first_name))} out of the group!",
+                parse_mode=ParseMode.HTML,
+            )
+            log = (
+                f"<b>{html.escape(chat.title)}:</b>\n"
+                f"#KICKED\n"
+                f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
+                f"<b>User:</b> {mention_html(member.user.id, html.escape(member.user.first_name))}"
+            )
+            if reason:
+                log += f"\n<b>Reason:</b> {reason}"
 
-        return log
-
+            return log
     else:
         message.reply_text("Well damn, I can't punch that user.")
 
@@ -408,11 +421,12 @@ __help__ = """
  • `/tban <userhandle> x(m/h/d)`*:* bans a user for `x` time. (via handle, or reply). `m` = `minutes`, `h` = `hours`, `d` = `days`.
  • `/unban <userhandle>`*:* unbans a user. (via handle, or reply)
  • `/kick <userhandle>`*:* Kicks a user out of the group, (via handle, or reply)
+ • `/skick <userhandle>`*:* Silently kicks the user. Deletes command, Replied message and doesn't reply. (via handle, or reply)
 """
 
 BAN_HANDLER = CommandHandler(["ban", "sban"], ban)
 TEMPBAN_HANDLER = CommandHandler(["tban"], temp_ban)
-PUNCH_HANDLER = CommandHandler("kick", punch)
+PUNCH_HANDLER = CommandHandler(["kick", "skick"], punch)
 UNBAN_HANDLER = CommandHandler("unban", unban)
 ROAR_HANDLER = CommandHandler("roar", selfunban)
 PUNCHME_HANDLER = DisableAbleCommandHandler("kickme", punchme, filters=Filters.group)
