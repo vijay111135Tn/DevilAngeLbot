@@ -347,6 +347,11 @@ def del_blacklist(update, context):
     user = update.effective_user
     bot = context.bot
     to_match = extract_text(message)
+    name = (
+        message.reply_to_message.from_user.first_name
+        if message.reply_to_message
+        else message.from_user.first_name
+    )
     if not to_match:
         return
     if is_approved(chat.id, user.id):
@@ -387,7 +392,7 @@ def del_blacklist(update, context):
                     )
                     bot.sendMessage(
                         chat.id,
-                        f"Muted {mention_html(user.id, html.escape(user.first_name))} for using Blacklisted word: {trigger}!",
+                        f"Muted {name} for using Blacklisted word: {trigger}!",
                     )
                     return
                 elif getmode == 4:
