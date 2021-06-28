@@ -346,7 +346,8 @@ def del_blacklist(update, context):
     message = update.effective_message
     user = update.effective_user
     bot = context.bot
-    user_id = extract_user_and_text(message)
+    args = context.args
+    user_id, reason = extract_user_and_text(message, args)
     member = chat.get_member(user_id)
     to_match = extract_text(message)
     if not to_match:
