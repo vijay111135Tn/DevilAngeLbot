@@ -401,7 +401,7 @@ def del_blacklist(update, context):
                     if res:
                         bot.sendMessage(
                             chat.id,
-                            f"Kicked {mention_html(user.id, html.escape(user.first_name))} for using Blacklisted word: {trigger}!",
+                            f"Kicked {name} for using Blacklisted word: {trigger}!",
                         )
                     return
                 elif getmode == 5:
@@ -409,7 +409,7 @@ def del_blacklist(update, context):
                     chat.kick_member(user.id)
                     bot.sendMessage(
                         chat.id,
-                        f"Banned {mention_html(user.id, html.escape(user.first_name))} for using Blacklisted word: {trigger}",
+                        f"Banned {name} for using Blacklisted word: {trigger}",
                     )
                     return
                 elif getmode == 6:
@@ -418,7 +418,7 @@ def del_blacklist(update, context):
                     chat.kick_member(user.id, until_date=bantime)
                     bot.sendMessage(
                         chat.id,
-                        f"Banned {mention_html(user.id, html.escape(user.first_name))} until '{value}' for using Blacklisted word: {trigger}!",
+                        f"Banned {name} until '{value}' for using Blacklisted word: {trigger}!",
                     )
                     return
                 elif getmode == 7:
@@ -432,7 +432,7 @@ def del_blacklist(update, context):
                     )
                     bot.sendMessage(
                         chat.id,
-                        f"Muted {mention_html(user.id, html.escape(user.first_name))} until '{value}' for using Blacklisted word: {trigger}!",
+                        f"Muted {name} until '{value}' for using Blacklisted word: {trigger}!",
                     )
                     return
             except BadRequest as excp:
