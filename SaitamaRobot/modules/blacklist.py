@@ -18,6 +18,7 @@ from SaitamaRobot.modules.helper_funcs.string_handling import extract_time
 from SaitamaRobot.modules.connection import connected
 from SaitamaRobot.modules.sql.approve_sql import is_approved
 from SaitamaRobot.modules.helper_funcs.alternate import send_message, typing_action
+from SaitamaRobot.modules.helper_funcs.extraction import extract_user_and_text
 
 BLACKLIST_GROUP = 11
 
@@ -343,6 +344,7 @@ def findall(p, s):
 def del_blacklist(update, context):
     chat = update.effective_chat
     message = update.effective_message
+    member = chat.get_member(user_id)
     user = update.effective_user
     bot = context.bot
     to_match = extract_text(message)
