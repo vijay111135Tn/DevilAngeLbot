@@ -346,9 +346,6 @@ def del_blacklist(update, context):
     message = update.effective_message
     user = update.effective_user
     bot = context.bot
-    args = context.args
-    user_id, reason = extract_user_and_text(message, args)
-    member = chat.get_member(user_id)
     to_match = extract_text(message)
     if not to_match:
         return
@@ -390,7 +387,7 @@ def del_blacklist(update, context):
                     )
                     bot.sendMessage(
                         chat.id,
-                        f"Muted {mention_html(member.user.id, html.escape(member.user.first_name))} for using Blacklisted word: {trigger}!",
+                        f"Muted {mention_html(user.id, html.escape(user.first_name))} for using Blacklisted word: {trigger}!",
                     )
                     return
                 elif getmode == 4:
@@ -399,7 +396,7 @@ def del_blacklist(update, context):
                     if res:
                         bot.sendMessage(
                             chat.id,
-                            f"Kicked {mention_html(member.user.id, html.escape(member.user.first_name))} for using Blacklisted word: {trigger}!",
+                            f"Kicked {mention_html(user.id, html.escape(user.first_name))} for using Blacklisted word: {trigger}!",
                         )
                     return
                 elif getmode == 5:
@@ -407,7 +404,7 @@ def del_blacklist(update, context):
                     chat.kick_member(user.id)
                     bot.sendMessage(
                         chat.id,
-                        f"Banned {mention_html(member.user.id, html.escape(member.user.first_name))} for using Blacklisted word: {trigger}",
+                        f"Banned {mention_html(user.id, html.escape(user.first_name))} for using Blacklisted word: {trigger}",
                     )
                     return
                 elif getmode == 6:
@@ -416,7 +413,7 @@ def del_blacklist(update, context):
                     chat.kick_member(user.id, until_date=bantime)
                     bot.sendMessage(
                         chat.id,
-                        f"Banned {mention_html(member.user.id, html.escape(member.user.first_name))} until '{value}' for using Blacklisted word: {trigger}!",
+                        f"Banned {mention_html(user.id, html.escape(user.first_name))} until '{value}' for using Blacklisted word: {trigger}!",
                     )
                     return
                 elif getmode == 7:
@@ -430,7 +427,7 @@ def del_blacklist(update, context):
                     )
                     bot.sendMessage(
                         chat.id,
-                        f"Muted {mention_html(member.user.id, html.escape(member.user.first_name))} until '{value}' for using Blacklisted word: {trigger}!",
+                        f"Muted {mention_html(user.id, html.escape(user.first_name))} until '{value}' for using Blacklisted word: {trigger}!",
                     )
                     return
             except BadRequest as excp:
