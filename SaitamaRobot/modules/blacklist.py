@@ -344,10 +344,10 @@ def findall(p, s):
 def del_blacklist(update, context):
     chat = update.effective_chat
     message = update.effective_message
-    member = chat.get_member(user_id)
     user = update.effective_user
     bot = context.bot
     user_id = extract_user_and_text(message)
+    member = chat.get_member(user_id)
     to_match = extract_text(message)
     if not to_match:
         return
