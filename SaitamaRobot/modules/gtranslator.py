@@ -53,6 +53,15 @@ def languages(update: Update, context: CallbackContext) -> None:
     )
         )
 
+__help__ = """
+• `/tr` or `/tl` (language code) as reply to a long message
+*Example:*
+  `/tr en`*:* translates something to english
+  `/tr hi//en`*:* translates hindi to english
+  `/lang `*:* Get a list of languages supported 
+"""
+
+
 TRANSLATE_HANDLER = DisableAbleCommandHandler(["tr", "tl"], translate)
 LANGUAGE_HANDLER = DisableAbleCommandHandler(["lang"], languages)
 
