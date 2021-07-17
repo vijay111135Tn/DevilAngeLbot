@@ -4,6 +4,7 @@ SaitamaRobot/elevated_users.json
 SaitamaRobot/config.py
 SaitamaRobot/config.ini
 log.txt
+logfile
 kangsticker.png
 updates.txt
 start_service.bat

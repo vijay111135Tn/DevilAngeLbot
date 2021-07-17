@@ -1,4 +1,4 @@
-import re, ast
+import re, ast, base64
 from io import BytesIO
 import random
 from typing import Optional
@@ -7,7 +7,11 @@ import SaitamaRobot.modules.sql.notes_sql as sql
 from SaitamaRobot import LOGGER, JOIN_LOGGER, SUPPORT_CHAT, dispatcher, DRAGONS
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from SaitamaRobot.modules.helper_funcs.handlers import MessageHandlerChecker
-from SaitamaRobot.modules.helper_funcs.chat_status import user_admin, connection_status
+from SaitamaRobot.modules.helper_funcs.chat_status import (
+    is_user_admin,
+    user_admin,
+    connection_status,
+)
 from SaitamaRobot.modules.helper_funcs.misc import build_keyboard, revert_buttons
 from SaitamaRobot.modules.helper_funcs.msg_types import get_note_type
 from SaitamaRobot.modules.helper_funcs.string_handling import (
@@ -55,10 +59,15 @@ ENUM_FUNC_MAP = {
 
 
 # Do not async
-def get(update, context, notename, show_none=True, no_format=False):
+def get(
+    update, context, notename, show_none=True, no_format=False, privnote_chat_id=None
+):
     bot = context.bot
     chat_id = update.effective_message.chat.id
-    note_chat_id = update.effective_chat.id
+    if privnote_chat_id:
+        note_chat_id = privnote_chat_id
+    else:
+        note_chat_id = update.effective_chat.id
     note = sql.get_note(note_chat_id, notename)
     message = update.effective_message  # type: Optional[Message]
 
@@ -226,13 +235,103 @@ def get(update, context, notename, show_none=True, no_format=False):
 
 
 @run_async
+def private_notes_setting(update: Update, context: CallbackContext):
+    args = context.args
+    msg = update.effective_message
+    curr_setting = sql.get_privnotes_setting(msg.chat_id)
+    if len(args) >= 1:
+        if args[0].lower() in {"yes", "on"}:
+            if curr_setting is True:
+                msg.reply_text("Private notes is already enabled in this chat.")
+                return
+            sql.set_privnotes_setting(msg.chat_id, setting=True)
+            msg.reply_text("Turned on private notes.")
+
+        elif args[0].lower() in {"no", "off"}:
+            if curr_setting is False:
+                msg.reply_text("Private notes is already disabled in this chat.")
+                return
+            sql.set_privnotes_setting(msg.chat_id, setting=False)
+            msg.reply_text("Turned off private notes.")
+
+        else:
+            msg.reply_text(
+                "Invalid args! Usage: <code>/privatenotes on/off/yes/no</code>",
+                parse_mode=ParseMode.HTML,
+            )
+    else:
+        msg.reply_text(
+            f"Current privatenotes setting: <code>{'on' if curr_setting is True else 'off'}</code>",
+            parse_mode=ParseMode.HTML,
+        )
+
+
+# do not async
+def make_note_url(chat_id, notename):
+    note_data = f"[{chat_id}, '{notename}']".encode()
+    note_id = base64.urlsafe_b64encode(note_data).decode().replace("=", "")
+    deeplink_url = f"http://t.me/{dispatcher.bot.username}?start=privnote_{note_id}"
+    return deeplink_url
+
+
+@run_async
+def list_notes_deeplink(update: Update, context: CallbackContext):
+    chat_id = context.args[0].split("_")[1]
+    mem_status = context.bot.get_chat_member(chat_id, update.effective_user.id)
+    if mem_status in {"left", "banned"}:
+        update.effective_message.reply_text("You're not member of this chat!")
+        return
+    list_notes_real(update, chat_id, private_notes=True)
+
+
+@run_async
+def get_notes_deeplink(update: Update, context: CallbackContext):
+    note_id = context.args[0].split("_")[1]
+    # append '=' at the end for padding
+    while len(note_id) % 4 != 0:
+        note_id += "="
+    decoded_data = base64.b64decode(note_id.encode()).decode()
+    note_data = ast.literal_eval(decoded_data)
+
+    mem_status = context.bot.get_chat_member(note_data[0], update.effective_user.id)
+    if mem_status in {"left", "banned"}:
+        update.effective_message.reply_text("You're not member of this chat!")
+        return
+    get(update, context, note_data[1], show_none=False, privnote_chat_id=note_data[0])
+
+
+@run_async
 @connection_status
 def cmd_get(update: Update, context: CallbackContext):
+    user = update.effective_user
+    msg = update.effective_message
+    chat = update.effective_chat
     bot, args = context.bot, context.args
+    private_notes = sql.get_privnotes_setting(chat.id)
+
     if len(args) >= 2 and args[1].lower() == "noformat":
-        get(update, context, args[0].lower(), show_none=True, no_format=True)
+        if is_user_admin(chat, user.id):
+            get(update, context, args[0].lower(), show_none=True, no_format=True)
+        else:
+            msg.reply_text("Unformatted note can only be acessed by admins.")
     elif len(args) >= 1:
-        get(update, context, args[0].lower(), show_none=True)
+        if not private_notes:
+            get(update, context, args[0].lower(), show_none=True)
+        else:
+            msg.reply_text(
+                f"Click here to view '{args[0]}' in your PM",
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="Click here",
+                                url=make_note_url(chat.id, args[0].lower()),
+                            )
+                        ]
+                    ]
+                ),
+            )
+
     else:
         update.effective_message.reply_text("Get rekt")
 
@@ -240,10 +339,28 @@ def cmd_get(update: Update, context: CallbackContext):
 @run_async
 @connection_status
 def hash_get(update: Update, context: CallbackContext):
+    msg = update.effective_message
     message = update.effective_message.text
+    private_notes = sql.get_privnotes_setting(msg.chat.id)
+
     fst_word = message.split()[0]
     no_hash = fst_word[1:].lower()
-    get(update, context, no_hash, show_none=False)
+    if not private_notes:
+        get(update, context, no_hash, show_none=False)
+    else:
+        msg.reply_text(
+            f"Click here to view '{no_hash}' in your PM",
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            text="Click here",
+                            url=make_note_url(msg.chat.id, no_hash),
+                        )
+                    ]
+                ]
+            ),
+        )
 
 
 @run_async
@@ -252,11 +369,27 @@ def slash_get(update: Update, context: CallbackContext):
     message, chat_id = update.effective_message.text, update.effective_chat.id
     no_slash = message[1:]
     note_list = sql.get_all_chat_notes(chat_id)
+    private_notes = sql.get_privnotes_setting(chat_id)
 
     try:
         noteid = note_list[int(no_slash) - 1]
         note_name = str(noteid).strip(">").split()[1]
-        get(update, context, note_name, show_none=False)
+        if not private_notes:
+            get(update, context, note_name, show_none=False)
+        else:
+            update.effective_message.reply_text(
+                f"Click here to view '{note_name}' in your PM",
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="Click here",
+                                url=make_note_url(chat_id, note_name),
+                            )
+                        ]
+                    ]
+                ),
+            )
     except IndexError:
         update.effective_message.reply_text("Wrong Note ID 😾")
 
@@ -284,7 +417,7 @@ def save(update: Update, context: CallbackContext):
     )
 
     msg.reply_text(
-        f"Yas! Added `{note_name}`.\nGet it with /get `{note_name}`, or `#{note_name}`",
+        f"Yas! Added `{note_name}`.\nGet it with `/get {note_name}`, or `#{note_name}`",
         parse_mode=ParseMode.MARKDOWN,
     )
 
@@ -385,14 +518,41 @@ def clearall_btn(update: Update, context: CallbackContext):
 @connection_status
 def list_notes(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
+    private_notes = sql.get_privnotes_setting(chat_id)
+    if not private_notes:
+        list_notes_real(update, chat_id)
+    else:
+        update.effective_message.reply_text(
+            "Click here to view all notes of this chat.",
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            text="Click Here",
+                            url=f"http://t.me/{context.bot.username}?start=listnotes_{chat_id}",
+                        )
+                    ]
+                ]
+            ),
+        )
+
+
+# do not async
+def list_notes_real(update, chat_id, private_notes=False):
     note_list = sql.get_all_chat_notes(chat_id)
     notes = len(note_list) + 1
     msg = "Get note by `/notenumber` or `#notename` \n\n  *ID*    *Note* \n"
     for note_id, note in zip(range(1, notes), note_list):
         if note_id < 10:
-            note_name = f"`{note_id:2}.`  `#{(note.name.lower())}`\n"
+            if private_notes:
+                note_name = f"`{note_id:2}.` [{note.name.lower()}]({make_note_url(chat_id, note.name.lower())})\n"
+            else:
+                note_name = f"`{note_id:2}.`  `#{(note.name.lower())}`\n"
         else:
-            note_name = f"`{note_id}.`  `#{(note.name.lower())}`\n"
+            if private_notes:
+                note_name = f"`{note_id}.` [{note.name.lower()}]({make_note_url(chat_id, note.name.lower())})\n"
+            else:
+                note_name = f"`{note_id}.`  `#{(note.name.lower())}`\n"
         if len(msg) + len(note_name) > MAX_MESSAGE_LENGTH:
             update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
             msg = ""
@@ -405,7 +565,9 @@ def list_notes(update: Update, context: CallbackContext):
             update.effective_message.reply_text("No notes in this chat!", quote=False)
 
     elif len(msg) != 0:
-        update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+        update.effective_message.reply_text(
+            msg, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=private_notes
+        )
 
 
 def __import_data__(chat_id, data):
@@ -585,6 +747,9 @@ A button can be added to a note by using standard markdown link syntax - the lin
 
 __mod_name__ = "Notes"
 
+PRIVATE_NOTE_HANDLER = CommandHandler(
+    "privatenotes", private_notes_setting, filters=Filters.group
+)
 GET_HANDLER = CommandHandler("get", cmd_get)
 HASH_GET_HANDLER = MessageHandler(Filters.regex(r"^#[^\s]+"), hash_get)
 SLASH_GET_HANDLER = MessageHandler(Filters.regex(r"^/\d+$"), slash_get)
@@ -596,6 +761,14 @@ LIST_HANDLER = DisableAbleCommandHandler(["notes", "saved"], list_notes, admin_o
 CLEARALL = DisableAbleCommandHandler("removeallnotes", clearall)
 CLEARALL_BTN = CallbackQueryHandler(clearall_btn, pattern=r"notes_.*")
 
+GET_NOTES_DEEPLINK = CommandHandler(
+    "start", get_notes_deeplink, filters=Filters.regex("privnote_")
+)
+LIST_NOTES_DEEPLINK = CommandHandler(
+    "start", list_notes_deeplink, filters=Filters.regex("listnotes_")
+)
+
+dispatcher.add_handler(PRIVATE_NOTE_HANDLER)
 dispatcher.add_handler(GET_HANDLER)
 dispatcher.add_handler(SAVE_HANDLER)
 dispatcher.add_handler(LIST_HANDLER)
@@ -604,3 +777,5 @@ dispatcher.add_handler(HASH_GET_HANDLER)
 dispatcher.add_handler(SLASH_GET_HANDLER)
 dispatcher.add_handler(CLEARALL)
 dispatcher.add_handler(CLEARALL_BTN)
+dispatcher.add_handler(GET_NOTES_DEEPLINK)
+dispatcher.add_handler(LIST_NOTES_DEEPLINK)

@@ -44,11 +44,24 @@ class Buttons(BASE):
         self.same_line = same_line
 
 
+class PrivateNotes(BASE):
+    __tablename__ = "private_notes"
+    chat_id = Column(String(14), primary_key=True)
+    setting = Column(Boolean, default=False)
+
+    def __init__(self, chat_id, setting):
+        self.chat_id = str(chat_id)
+        self.setting = setting
+
+
 Notes.__table__.create(checkfirst=True)
 Buttons.__table__.create(checkfirst=True)
+PrivateNotes.__table__.create(checkfirst=True)
+
 
 NOTES_INSERTION_LOCK = threading.RLock()
 BUTTONS_INSERTION_LOCK = threading.RLock()
+PRIVATE_NOTES_LOCK = threading.RLock()
 
 
 def add_note_to_db(chat_id, note_name, note_data, msgtype, buttons=None, file=None):
@@ -167,6 +180,28 @@ def num_chats():
         return SESSION.query(func.count(distinct(Notes.chat_id))).scalar()
     finally:
         SESSION.close()
+
+
+def get_privnotes_setting(chat_id):
+    try:
+        res = SESSION.query(PrivateNotes).get(str(chat_id))
+        if not res:
+            return False
+        return res.setting
+    finally:
+        SESSION.close()
+
+
+def set_privnotes_setting(chat_id, setting):
+    with PRIVATE_NOTES_LOCK:
+        res = SESSION.query(PrivateNotes).get(str(chat_id))
+        if not res:
+            res = PrivateNotes(str(chat_id), setting)
+            SESSION.add(res)
+            SESSION.flush()
+        else:
+            res.setting = setting
+        SESSION.commit()
 
 
 def migrate_chat(old_chat_id, new_chat_id):
