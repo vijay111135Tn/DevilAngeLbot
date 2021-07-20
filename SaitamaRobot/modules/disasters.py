@@ -618,13 +618,6 @@ Group admins/group owners do not need these commands.
  ╠ `/rmute user group`*:* Remote mute
  ╚ `/runmute user group`*:* Remote un-mute
 
- ╔ *Windows self hosted only:*
- ╠ `/reboot`*:* Restarts the bots service
- ╚ `/gitpull`*:* Pulls the repo and then restarts the bots service
-
- ╔ *Chatbot:*
- ╚ `/listaichats`*:* Lists the chats the chatmode is enabled in
-
  ╔ *Debugging and Shell:*
  ╠ `/debug <on/off>`*:* Logs commands to updates.txt
  ╠ `/logs`*:* Run this in support group to get logs in pm
