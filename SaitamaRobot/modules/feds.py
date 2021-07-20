@@ -546,7 +546,7 @@ def fed_admin(update: Update, context: CallbackContext):
     try:
         owner_name = owner.first_name + " " + owner.last_name
     except BaseException:
-        owner_name = owner.first_name or 'Deleted'
+        owner_name = owner.first_name or "Deleted"
     text += " • {}\n".format(mention_html(owner.id, owner_name))
 
     members = sql.all_fed_members(fed_id)
@@ -556,7 +556,7 @@ def fed_admin(update: Update, context: CallbackContext):
         text += "\n🔱 Admin:\n"
         for x in members:
             user = bot.get_chat(x)
-            name = user.first_name or 'Deleted'
+            name = user.first_name or "Deleted"
             text += " • {}\n".format(mention_html(user.id, user.first_name))
 
     update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
