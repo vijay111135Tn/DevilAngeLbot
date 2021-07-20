@@ -60,7 +60,7 @@ __help__ = """
 *Example:*
   `/tr en`*:* translates something to english
   `/tr hi//en`*:* translates hindi to english
-  `/lang `*:* Get a list of languages supported 
+• `/lang `*:* Get a list of languages supported 
 """
 
 
