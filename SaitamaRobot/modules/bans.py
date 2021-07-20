@@ -84,6 +84,10 @@ def ban(update: Update, context: CallbackContext) -> str:
         else:
             message.reply_text("This user has immunity and cannot be banned.")
         return log_message
+
+    if message.text.startswith("/d") and message.reply_to_message:
+        message.reply_to_message.delete()
+
     if message.text.startswith("/s"):
         silent = True
         if not can_delete(chat, context.bot.id):
@@ -418,13 +422,14 @@ __help__ = """
 *Admins only:*
  • `/ban <userhandle>`*:* bans a user. (via handle, or reply)
  • `/sban <userhandle>`*:* Silently ban a user. Deletes command, Replied message and doesn't reply. (via handle, or reply)
+ • `/dban <userhandle>`*:* Bans the user and delete the message which is repiled to.
  • `/tban <userhandle> x(m/h/d)`*:* bans a user for `x` time. (via handle, or reply). `m` = `minutes`, `h` = `hours`, `d` = `days`.
  • `/unban <userhandle>`*:* unbans a user. (via handle, or reply)
  • `/kick <userhandle>`*:* Kicks a user out of the group, (via handle, or reply)
  • `/skick <userhandle>`*:* Silently kicks the user. Deletes command, Replied message and doesn't reply. (via handle, or reply)
 """
 
-BAN_HANDLER = CommandHandler(["ban", "sban"], ban)
+BAN_HANDLER = CommandHandler(["ban", "sban", "dban"], ban)
 TEMPBAN_HANDLER = CommandHandler(["tban"], temp_ban)
 PUNCH_HANDLER = CommandHandler(["kick", "skick"], punch)
 UNBAN_HANDLER = CommandHandler("unban", unban)
