@@ -743,6 +743,10 @@ A button can be added to a note by using standard markdown link syntax - the lin
  • `/removeallnotes`*:* removes all notes from the group
  *Note:* Note names are case-insensitive, and they are automatically converted to lowercase before getting saved.
 
+ • `/privatenotes <on/off>`*:* Enabling this will redirect the saved notes to bot's PM when the notename or notes \
+  command is triggerd. Hence, reducing notes spam in groups. \
+  Default mode for private notes is 'off' state.
+ 
 """
 
 __mod_name__ = "Notes"
