@@ -292,7 +292,6 @@ def get_notes_deeplink(update: Update, context: CallbackContext):
         note_id += "="
     decoded_data = base64.b64decode(note_id.encode()).decode()
     note_data = ast.literal_eval(decoded_data)
-
     mem_status = context.bot.get_chat_member(note_data[0], update.effective_user.id)
     if mem_status in {"left", "banned"}:
         update.effective_message.reply_text("You're not member of this chat!")
@@ -318,6 +317,11 @@ def cmd_get(update: Update, context: CallbackContext):
         if not private_notes:
             get(update, context, args[0].lower(), show_none=True)
         else:
+            check = sql.get_note(chat.id, args[0])
+            if not check:
+                msg.reply_text("This note doesn't exist")
+                return
+
             msg.reply_text(
                 f"Click here to view '{args[0]}' in your PM",
                 reply_markup=InlineKeyboardMarkup(
@@ -348,6 +352,11 @@ def hash_get(update: Update, context: CallbackContext):
     if not private_notes:
         get(update, context, no_hash, show_none=False)
     else:
+        check = sql.get_note(msg.chat.id, no_hash)
+        if not check:
+            msg.reply_text("This note doesn't exist")
+            return
+
         msg.reply_text(
             f"Click here to view '{no_hash}' in your PM",
             reply_markup=InlineKeyboardMarkup(
@@ -377,6 +386,10 @@ def slash_get(update: Update, context: CallbackContext):
         if not private_notes:
             get(update, context, note_name, show_none=False)
         else:
+            check = sql.get_note(chat_id, note_name)
+            if not check:
+                update.effective_message.reply_text("This note doesn't exist")
+                return
             update.effective_message.reply_text(
                 f"Click here to view '{note_name}' in your PM",
                 reply_markup=InlineKeyboardMarkup(
