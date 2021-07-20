@@ -545,7 +545,7 @@ def fed_admin(update: Update, context: CallbackContext):
     owner = bot.get_chat(info["owner"])
     try:
         owner_name = owner.first_name + " " + owner.last_name
-     except BaseException:
+    except BaseException:
         owner_name = owner.first_name or 'Deleted'
     text += " • {}\n".format(mention_html(owner.id, owner_name))
 
