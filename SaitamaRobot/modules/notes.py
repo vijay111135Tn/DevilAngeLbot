@@ -277,8 +277,9 @@ def make_note_url(chat_id, notename):
 @run_async
 def list_notes_deeplink(update: Update, context: CallbackContext):
     chat_id = context.args[0].split("_")[1]
-    mem_status = context.bot.get_chat_member(chat_id, update.effective_user.id)
-    if mem_status in {"left", "banned"}:
+    # don't let outsiders acess the chat notes
+    mem = context.bot.get_chat_member(chat_id, update.effective_user.id)
+    if mem.status in {"left", "banned"}:
         update.effective_message.reply_text("You're not member of this chat!")
         return
     list_notes_real(update, chat_id, private_notes=True)
@@ -292,8 +293,9 @@ def get_notes_deeplink(update: Update, context: CallbackContext):
         note_id += "="
     decoded_data = base64.b64decode(note_id.encode()).decode()
     note_data = ast.literal_eval(decoded_data)
-    mem_status = context.bot.get_chat_member(note_data[0], update.effective_user.id)
-    if mem_status in {"left", "banned"}:
+    # don't let outsiders acess the chat notes
+    mem = context.bot.get_chat_member(note_data[0], update.effective_user.id)
+    if mem.status in {"left", "banned"}:
         update.effective_message.reply_text("You're not member of this chat!")
         return
     get(update, context, note_data[1], show_none=False, privnote_chat_id=note_data[0])
