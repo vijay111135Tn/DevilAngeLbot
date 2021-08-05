@@ -1,3 +1,4 @@
+import re
 import time
 from datetime import datetime
 
@@ -153,13 +154,23 @@ def twrp(update, context):
         date = page.find("em").text.strip()
         reply += f"*Updated:* {date}\n"
         trs = page.find("table").find_all("tr")
-        row = 2 if trs[0].find("a").text.endswith("tar") else 1
-        for i in range(row):
-            download = trs[i].find("a")
-            dl_link = f"https://eu.dl.twrp.me{download['href']}"
-            dl_file = download.text
-            size = trs[i].find("span", {"class": "filesize"}).text
-            reply += f"[{dl_file}]({dl_link}) - {size}\n"
+
+        # find latest version
+        base_ver = (0, 0, 0)
+        idx = 0
+        for i, tag in enumerate(trs):
+            dl_path = tag.find("a")["href"]
+            match = re.search("([\d.]+)", dl_path)
+            new_ver = tuple([int(x) for x in match.group(1).split(".")])
+            if new_ver > base_ver:
+                base_ver = new_ver
+                idx = i
+
+        download = trs[idx].find("a")
+        dl_link = f"https://eu.dl.twrp.me{download['href']}"
+        dl_file = download.text
+        size = trs[i].find("span", {"class": "filesize"}).text
+        reply += f"[{dl_file}]({dl_link}) - {size}\n"
 
         update.message.reply_text(
             "{}".format(reply),
