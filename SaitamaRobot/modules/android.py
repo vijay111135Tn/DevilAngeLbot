@@ -169,7 +169,7 @@ def twrp(update, context):
         download = trs[idx].find("a")
         dl_link = f"https://eu.dl.twrp.me{download['href']}"
         dl_file = download.text
-        size = trs[i].find("span", {"class": "filesize"}).text
+        size = trs[idx].find("span", {"class": "filesize"}).text
         reply += f"[{dl_file}]({dl_link}) - {size}\n"
 
         update.message.reply_text(
