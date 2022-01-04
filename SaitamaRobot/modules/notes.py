@@ -560,8 +560,10 @@ def list_notes_real(update, chat_id, private_notes=False):
     for note_id, note in zip(range(1, notes), note_list):
         if note_id < 10:
             if private_notes:
+                msg = "Tap on the notename to view the notes \n\n  *ID*    *Note* \n"
                 note_name = f"`{note_id:2}.` [{note.name.lower()}]({make_note_url(chat_id, note.name.lower())})\n"
             else:
+                msg = "Tap on the notename to view the notes \n\n  *ID*    *Note* \n"
                 note_name = f"`{note_id:2}.`  `#{(note.name.lower())}`\n"
         else:
             if private_notes:
