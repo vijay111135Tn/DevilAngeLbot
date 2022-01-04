@@ -401,7 +401,7 @@ def del_blacklist(update, context):
                     return
                 elif getmode == 5:
                     message.delete()
-                    chat.kick_member(user.id)
+                    chat.ban_member(user.id)
                     bot.sendMessage(
                         chat.id,
                         f"Banned {name} for using Blacklisted word: {trigger}",
@@ -410,7 +410,7 @@ def del_blacklist(update, context):
                 elif getmode == 6:
                     message.delete()
                     bantime = extract_time(message, value)
-                    chat.kick_member(user.id, until_date=bantime)
+                    chat.ban_member(user.id, until_date=bantime)
                     bot.sendMessage(
                         chat.id,
                         f"Banned {name} until '{value}' for using Blacklisted word: {trigger}!",
@@ -491,7 +491,7 @@ ADD_BLACKLIST_HANDLER = CommandHandler("addblacklist", add_blacklist, run_async=
 UNBLACKLIST_HANDLER = CommandHandler("unblacklist", unblacklist, run_async=True)
 BLACKLISTMODE_HANDLER = CommandHandler("blacklistmode", blacklist_mode, pass_args=True, run_async=True)
 BLACKLIST_DEL_HANDLER = MessageHandler(
-    (Filters.text | Filters.command | Filters.sticker | Filters.photo) & Filters.group,
+    (Filters.text | Filters.command | Filters.sticker | Filters.photo) & Filters.chat_type.groups,
     del_blacklist,
     allow_edit=True,
     run_async=True,

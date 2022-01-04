@@ -661,13 +661,13 @@ def main():
     if WEBHOOK:
         LOGGER.info("Using webhooks.")
         if CERT_PATH:
-            updater.bot.start_webhook(webhook_url=URL + TOKEN, certificate=open(CERT_PATH, "rb"))
+            updater.start_webhook(webhook_url=URL + TOKEN, certificate=open(CERT_PATH, "rb"))
         else:
-            updater.bot.start_webhook(webhook_url=URL + TOKEN)
+            updater.start_webhook(webhook_url=URL + TOKEN)
 
     else:
         LOGGER.info("Using long polling.")
-        updater.start_polling(timeout=15, read_latency=4, clean=True)
+        updater.start_polling(timeout=15, read_latency=4, drop_pending_updates=True)
 
     if len(argv) not in (1, 3, 4):
         telethn.disconnect()

@@ -746,7 +746,7 @@ def fed_ban(update: Update, context: CallbackContext):
 							 "\n<b>User ID:</b> <code>{}</code>" \
 							 "\n<b>Reason:</b> {}".format(fed_name, mention_html(user.id, user.first_name), user_target, fban_user_id, reason), parse_mode="HTML")
 				"""
-                bot.kick_chat_member(fedschat, fban_user_id)
+                bot.ban_chat_member(fedschat, fban_user_id)
             except BadRequest as excp:
                 if excp.message in FBAN_ERRORS:
                     try:
@@ -787,7 +787,7 @@ def fed_ban(update: Update, context: CallbackContext):
                 all_fedschat = sql.all_fed_chats(fedsid)
                 for fedschat in all_fedschat:
                     try:
-                        bot.kick_chat_member(fedschat, fban_user_id)
+                        bot.ban_chat_member(fedschat, fban_user_id)
                     except BadRequest as excp:
                         if excp.message in FBAN_ERRORS:
                             try:
@@ -910,7 +910,7 @@ def fed_ban(update: Update, context: CallbackContext):
 							"\n<b>User ID:</b> <code>{}</code>" \
 							"\n<b>Reason:</b> {}".format(fed_name, mention_html(user.id, user.first_name), user_target, fban_user_id, reason), parse_mode="HTML")
 			"""
-            bot.kick_chat_member(fedschat, fban_user_id)
+            bot.ban_chat_member(fedschat, fban_user_id)
         except BadRequest as excp:
             if excp.message in FBAN_ERRORS:
                 pass
@@ -942,7 +942,7 @@ def fed_ban(update: Update, context: CallbackContext):
                 all_fedschat = sql.all_fed_chats(fedsid)
                 for fedschat in all_fedschat:
                     try:
-                        bot.kick_chat_member(fedschat, fban_user_id)
+                        bot.fban_chat_member(fedschat, fban_user_id)
                     except BadRequest as excp:
                         if excp.message in FBAN_ERRORS:
                             try:
@@ -2313,7 +2313,7 @@ def is_user_fed_owner(fed_id, user_id):
 #        update.effective_message.reply_text(
 #            "This user is banned in current federation! I will remove him.",
 #        )
-#        bot.kick_chat_member(chat.id, user.id)
+#        bot.ban_chat_member(chat.id, user.id)
 #        return True
 #    else:
 #        return False

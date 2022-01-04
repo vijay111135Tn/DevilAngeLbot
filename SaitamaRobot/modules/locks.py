@@ -438,7 +438,7 @@ def del_lockables(update, context):
                             )
                             return
 
-                        chat.kick_member(new_mem.id)
+                        chat.ban_member(new_mem.id)
                         send_message(
                             update.effective_message,
                             "Only admins are allowed to add bots in this chat! Get outta here.",
@@ -595,9 +595,9 @@ Locking bots will stop non-admins from adding bots to the chat.
 __mod_name__ = "Locks"
 
 LOCKTYPES_HANDLER = DisableAbleCommandHandler("locktypes", locktypes, run_async=True)
-LOCK_HANDLER = CommandHandler("lock", lock, pass_args=True, run_async=True)  # , filters=Filters.group)
-UNLOCK_HANDLER = CommandHandler("unlock", unlock, pass_args=True, run_async=True)  # , filters=Filters.group)
-LOCKED_HANDLER = CommandHandler("locks", list_locks, run_async=True)  # , filters=Filters.group)
+LOCK_HANDLER = CommandHandler("lock", lock, pass_args=True, run_async=True)  # , filters=Filters.chat_type.groups)
+UNLOCK_HANDLER = CommandHandler("unlock", unlock, pass_args=True, run_async=True)  # , filters=Filters.chat_type.groups)
+LOCKED_HANDLER = CommandHandler("locks", list_locks, run_async=True)  # , filters=Filters.chat_type.groups)
 
 dispatcher.add_handler(LOCK_HANDLER)
 dispatcher.add_handler(UNLOCK_HANDLER)
@@ -605,6 +605,6 @@ dispatcher.add_handler(LOCKTYPES_HANDLER)
 dispatcher.add_handler(LOCKED_HANDLER)
 
 dispatcher.add_handler(
-    MessageHandler(Filters.all & Filters.group, del_lockables),
+    MessageHandler(Filters.all & Filters.chat_type.groups, del_lockables),
     PERM_GROUP,
 )

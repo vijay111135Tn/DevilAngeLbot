@@ -756,7 +756,7 @@ A button can be added to a note by using standard markdown link syntax - the lin
 
 __mod_name__ = "Notes"
 
-PRIVATE_NOTE_HANDLER = CommandHandler("privatenotes", private_notes_setting, filters=Filters.group, run_async=True)
+PRIVATE_NOTE_HANDLER = CommandHandler("privatenotes", private_notes_setting, filters=Filters.chat_type.groups, run_async=True)
 GET_HANDLER = CommandHandler("get", cmd_get, run_async=True)
 HASH_GET_HANDLER = MessageHandler(Filters.regex(r"^#[^\s]+"), hash_get, run_async=True)
 SLASH_GET_HANDLER = MessageHandler(Filters.regex(r"^/\d+$"), slash_get, run_async=True)
