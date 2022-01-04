@@ -2,11 +2,10 @@ import wikipedia
 from SaitamaRobot import dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from telegram import ParseMode, Update
-from telegram.ext import CallbackContext, run_async
+from telegram.ext import CallbackContext
 from wikipedia.exceptions import DisambiguationError, PageError
 
 
-@run_async
 def wiki(update: Update, context: CallbackContext):
     msg = (
         update.effective_message.reply_to_message
@@ -55,5 +54,5 @@ def wiki(update: Update, context: CallbackContext):
             )
 
 
-WIKI_HANDLER = DisableAbleCommandHandler("wiki", wiki)
+WIKI_HANDLER = DisableAbleCommandHandler("wiki", wiki, run_async=True)
 dispatcher.add_handler(WIKI_HANDLER)

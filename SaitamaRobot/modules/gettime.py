@@ -5,7 +5,7 @@ import requests
 from SaitamaRobot import TIME_API_KEY, dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from telegram import ParseMode, Update
-from telegram.ext import CallbackContext, run_async
+from telegram.ext import CallbackContext
 
 
 def generate_time(to_find: str, findtype: List[str]) -> str:
@@ -61,7 +61,6 @@ def generate_time(to_find: str, findtype: List[str]) -> str:
     return result
 
 
-@run_async
 def gettime(update: Update, context: CallbackContext):
     message = update.effective_message
 
@@ -101,7 +100,7 @@ __help__ = """
  • `/time <query>`*:* Gives information about a timezone.
  """
 
-TIME_HANDLER = DisableAbleCommandHandler("time", gettime)
+TIME_HANDLER = DisableAbleCommandHandler("time", gettime, run_async=True)
 
 dispatcher.add_handler(TIME_HANDLER)
 

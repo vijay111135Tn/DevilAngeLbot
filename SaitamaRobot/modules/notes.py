@@ -34,7 +34,6 @@ from telegram.ext import (
     Filters,
     MessageHandler,
 )
-from telegram.ext.dispatcher import run_async
 
 FILE_MATCHER = re.compile(r"^###file_id(!photo)?###:(.*?)(?:\s|$)")
 STICKER_MATCHER = re.compile(r"^###sticker(!photo)?###:")
@@ -234,7 +233,6 @@ def get(
         message.reply_text("This note doesn't exist")
 
 
-@run_async
 def private_notes_setting(update: Update, context: CallbackContext):
     args = context.args
     msg = update.effective_message
@@ -274,7 +272,6 @@ def make_note_url(chat_id, notename):
     return deeplink_url
 
 
-@run_async
 def list_notes_deeplink(update: Update, context: CallbackContext):
     chat_id = context.args[0].split("_")[1]
     # don't let outsiders acess the chat notes
@@ -285,7 +282,6 @@ def list_notes_deeplink(update: Update, context: CallbackContext):
     list_notes_real(update, chat_id, private_notes=True)
 
 
-@run_async
 def get_notes_deeplink(update: Update, context: CallbackContext):
     note_id = context.args[0].split("_")[1]
     # append '=' at the end for padding
@@ -301,7 +297,6 @@ def get_notes_deeplink(update: Update, context: CallbackContext):
     get(update, context, note_data[1], show_none=False, privnote_chat_id=note_data[0])
 
 
-@run_async
 @connection_status
 def cmd_get(update: Update, context: CallbackContext):
     user = update.effective_user
@@ -342,7 +337,6 @@ def cmd_get(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Get rekt")
 
 
-@run_async
 @connection_status
 def hash_get(update: Update, context: CallbackContext):
     msg = update.effective_message
@@ -374,7 +368,6 @@ def hash_get(update: Update, context: CallbackContext):
         )
 
 
-@run_async
 @connection_status
 def slash_get(update: Update, context: CallbackContext):
     message, chat_id = update.effective_message.text, update.effective_chat.id
@@ -409,7 +402,6 @@ def slash_get(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Wrong Note ID 😾")
 
 
-@run_async
 @user_admin
 @connection_status
 def save(update: Update, context: CallbackContext):
@@ -454,7 +446,6 @@ def save(update: Update, context: CallbackContext):
         return
 
 
-@run_async
 @user_admin
 @connection_status
 def clear(update: Update, context: CallbackContext):
@@ -469,7 +460,6 @@ def clear(update: Update, context: CallbackContext):
             update.effective_message.reply_text("That's not a note in my database!")
 
 
-@run_async
 def clearall(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
@@ -497,7 +487,6 @@ def clearall(update: Update, context: CallbackContext):
         )
 
 
-@run_async
 def clearall_btn(update: Update, context: CallbackContext):
     query = update.callback_query
     chat = update.effective_chat
@@ -529,7 +518,6 @@ def clearall_btn(update: Update, context: CallbackContext):
             query.answer("You need to be admin to do this.")
 
 
-@run_async
 @connection_status
 def list_notes(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
@@ -768,26 +756,20 @@ A button can be added to a note by using standard markdown link syntax - the lin
 
 __mod_name__ = "Notes"
 
-PRIVATE_NOTE_HANDLER = CommandHandler(
-    "privatenotes", private_notes_setting, filters=Filters.group
-)
-GET_HANDLER = CommandHandler("get", cmd_get)
-HASH_GET_HANDLER = MessageHandler(Filters.regex(r"^#[^\s]+"), hash_get)
-SLASH_GET_HANDLER = MessageHandler(Filters.regex(r"^/\d+$"), slash_get)
-SAVE_HANDLER = CommandHandler("save", save)
-DELETE_HANDLER = CommandHandler("clear", clear)
+PRIVATE_NOTE_HANDLER = CommandHandler("privatenotes", private_notes_setting, filters=Filters.group, run_async=True)
+GET_HANDLER = CommandHandler("get", cmd_get, run_async=True)
+HASH_GET_HANDLER = MessageHandler(Filters.regex(r"^#[^\s]+"), hash_get, run_async=True)
+SLASH_GET_HANDLER = MessageHandler(Filters.regex(r"^/\d+$"), slash_get, run_async=True)
+SAVE_HANDLER = CommandHandler("save", save, run_async=True)
+DELETE_HANDLER = CommandHandler("clear", clear, run_async=True)
 
-LIST_HANDLER = DisableAbleCommandHandler(["notes", "saved"], list_notes, admin_ok=True)
+LIST_HANDLER = DisableAbleCommandHandler(["notes", "saved"], list_notes, admin_ok=True, run_async=True)
 
-CLEARALL = DisableAbleCommandHandler("removeallnotes", clearall)
-CLEARALL_BTN = CallbackQueryHandler(clearall_btn, pattern=r"notes_.*")
+CLEARALL = DisableAbleCommandHandler("removeallnotes", clearall, run_async=True)
+CLEARALL_BTN = CallbackQueryHandler(clearall_btn, pattern=r"notes_.*", run_async=True)
 
-GET_NOTES_DEEPLINK = CommandHandler(
-    "start", get_notes_deeplink, filters=Filters.regex("privnote_")
-)
-LIST_NOTES_DEEPLINK = CommandHandler(
-    "start", list_notes_deeplink, filters=Filters.regex("listnotes_")
-)
+GET_NOTES_DEEPLINK = CommandHandler("start", get_notes_deeplink, filters=Filters.regex("privnote_"), run_async=True)
+LIST_NOTES_DEEPLINK = CommandHandler("start", list_notes_deeplink, filters=Filters.regex("listnotes_"), run_async=True)
 
 dispatcher.add_handler(PRIVATE_NOTE_HANDLER)
 dispatcher.add_handler(GET_HANDLER)
