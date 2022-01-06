@@ -4,7 +4,7 @@ import textwrap
 
 import bs4
 import jikanpy
-import requests
+import cloudscraper
 from SaitamaRobot import dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from telegram import (
@@ -15,6 +15,8 @@ from telegram import (
     Message,
 )
 from telegram.ext import CallbackContext
+
+scrapper = cloudscraper.create_scraper()
 
 info_btn = "More Information"
 kaizoku_btn = "Kaizoku ☠️"
@@ -185,7 +187,7 @@ def airing(update: Update, context: CallbackContext):
         )
         return
     variables = {"search": search_str}
-    response = requests.post(
+    response = scrapper.post(
         url,
         json={"query": airing_query, "variables": variables},
     ).json()["data"]["Media"]
@@ -206,7 +208,7 @@ def anime(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Format : /anime < anime name >")
         return
     variables = {"search": search}
-    json = requests.post(
+    json = scrapper.post(
         url,
         json={"query": anime_query, "variables": variables},
     ).json()
@@ -278,7 +280,7 @@ def character(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Format : /character < character name >")
         return
     variables = {"query": search}
-    json = requests.post(
+    json = scrapper.post(
         url,
         json={"query": character_query, "variables": variables},
     ).json()
@@ -313,7 +315,7 @@ def manga(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Format : /manga < manga name >")
         return
     variables = {"search": search}
-    json = requests.post(
+    json = scrapper.post(
         url,
         json={"query": manga_query, "variables": variables},
     ).json()
@@ -452,7 +454,6 @@ def user(update: Update, context: CallbackContext):
         caption=caption,
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=InlineKeyboardMarkup(buttons),
-        disable_web_page_preview=False,
     )
     progress_message.delete()
 
@@ -483,7 +484,7 @@ def site_search(update: Update, context: CallbackContext, site: str):
 
     if site == "kaizoku":
         search_url = f"https://animekaizoku.com/?s={search_query}"
-        html_text = requests.get(search_url).text
+        html_text = scrapper.get(search_url).text
         soup = bs4.BeautifulSoup(html_text, "html.parser")
         search_result = soup.find_all("h2", {"class": "post-title"})
 
@@ -499,7 +500,7 @@ def site_search(update: Update, context: CallbackContext, site: str):
 
     elif site == "kayo":
         search_url = f"https://animekayo.com/?s={search_query}"
-        html_text = requests.get(search_url).text
+        html_text = scrapper.get(search_url).text
         soup = bs4.BeautifulSoup(html_text, "html.parser")
         search_result = soup.find_all("h2", {"class": "title"})
 

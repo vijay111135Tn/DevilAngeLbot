@@ -1,13 +1,15 @@
 import time
 from typing import List
 
-import requests
+import cloudscraper
 from telegram import ParseMode, Update
 from telegram.ext import CallbackContext
 
 from SaitamaRobot import StartTime, dispatcher
 from SaitamaRobot.modules.helper_funcs.chat_status import sudo_plus
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
+
+scrapper = cloudscraper.create_scraper()
 
 sites_list = {
     "Telegram": "https://api.telegram.org",
@@ -52,7 +54,7 @@ def ping_func(to_ping: List[str]) -> List[str]:
 
         start_time = time.time()
         site_to_ping = sites_list[each_ping]
-        r = requests.get(site_to_ping)
+        r = scrapper.get(site_to_ping)
         end_time = time.time()
         ping_time = str(round((end_time - start_time), 2)) + "s"
 

@@ -1,15 +1,17 @@
 import datetime
 from typing import List
 
-import requests
+import cloudscraper
 from SaitamaRobot import TIME_API_KEY, dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from telegram import ParseMode, Update
 from telegram.ext import CallbackContext
 
+scrapper = cloudscraper.create_scraper()
+
 
 def generate_time(to_find: str, findtype: List[str]) -> str:
-    data = requests.get(
+    data = scrapper.get(
         f"https://api.timezonedb.com/v2.1/list-time-zone"
         f"?key={TIME_API_KEY}"
         f"&format=json"

@@ -1,9 +1,10 @@
-import requests
+import cloudscraper
 from SaitamaRobot import dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from telegram import ParseMode, Update
 from telegram.ext import CallbackContext
 
+scrapper = cloudscraper.create_scraper()
 
 def paste(update: Update, context: CallbackContext):
     args = context.args
@@ -20,7 +21,7 @@ def paste(update: Update, context: CallbackContext):
         return
 
     key = (
-        requests.post("https://nekobin.com/api/documents", json={"content": data})
+        scrapper.post("https://nekobin.com/api/documents", json={"content": data})
         .json()
         .get("result")
         .get("key")

@@ -1,7 +1,9 @@
-import requests
+import cloudscraper
 from SaitamaRobot import CASH_API_KEY, dispatcher
 from telegram import Update, ParseMode
 from telegram.ext import CallbackContext, CommandHandler
+
+scrapper = cloudscraper.create_scraper()
 
 
 def convert(update: Update, context: CallbackContext):
@@ -26,7 +28,7 @@ def convert(update: Update, context: CallbackContext):
             f"&to_currency={new_cur}"
             f"&apikey={CASH_API_KEY}"
         )
-        response = requests.get(request_url).json()
+        response = scrapper.get(request_url).json()
         try:
             current_rate = float(
                 response["Realtime Currency Exchange Rate"]["5. Exchange Rate"],

@@ -1,6 +1,6 @@
 import traceback
 
-import requests
+import cloudscraper
 import html
 import random
 import sys
@@ -10,6 +10,7 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import CallbackContext, CommandHandler
 from SaitamaRobot import dispatcher, DEV_USERS, OWNER_ID
 
+scrapper = cloudscraper.create_scraper()
 pretty_errors.mono()
 
 
@@ -79,7 +80,7 @@ def error_callback(update: Update, context: CallbackContext):
         update.effective_message.text if update.effective_message else "No message",
         tb,
     )
-    key = requests.post(
+    key = scrapper.post(
         "https://nekobin.com/api/documents",
         json={"content": pretty_message},
     ).json()

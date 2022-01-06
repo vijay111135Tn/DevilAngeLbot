@@ -4,6 +4,7 @@ from datetime import datetime
 
 from bs4 import BeautifulSoup
 from requests import get
+import cloudscraper
 from telegram import Bot
 from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
@@ -18,6 +19,7 @@ from SaitamaRobot.modules.helper_funcs.alternate import typing_action
 
 GITHUB = "https://github.com"
 DEVICES_DATA = "https://raw.githubusercontent.com/androidtrackers/certified-android-devices/master/by_device.json"
+scrapper = cloudscraper.create_scraper()
 
 
 @typing_action
@@ -187,7 +189,7 @@ def orangefox(update, context):
     btn = ""
 
     if device:
-        link = get(
+        link = scrapper.get(
             f"https://api.orangefox.download/v3/releases/?codename={device}&sort=date_desc&limit=1"
         )
 
@@ -196,7 +198,7 @@ def orangefox(update, context):
         else:
             page = loads(link.content)
             file_id = page["data"][0]["_id"]
-            link = get(
+            link = scrapper.get(
                 f"https://api.orangefox.download/v3/devices/get?codename={device}"
             )
             page = loads(link.content)
@@ -204,7 +206,7 @@ def orangefox(update, context):
             model = page["model_name"]
             full_name = page["full_name"]
             maintainer = page["maintainer"]["username"]
-            link = get(f"https://api.orangefox.download/v3/releases/get?_id={file_id}")
+            link = scrapper.get(f"https://api.orangefox.download/v3/releases/get?_id={file_id}")
             page = loads(link.content)
             dl_file = page["filename"]
             build_type = page["type"]
