@@ -111,7 +111,6 @@ def ban(update: Update, context: CallbackContext) -> str:
             message.delete()
             return log
 
-        # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
         reply = (
             f"<code>❕</code><b>Ban Event</b>\n"
             f"<code> </code><b>•  User:</b> {mention_html(member.user.id, html.escape(member.user.first_name))}"
@@ -200,7 +199,6 @@ def temp_ban(update: Update, context: CallbackContext) -> str:
 
     try:
         chat.ban_member(user_id, until_date=bantime)
-        # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
         bot.sendMessage(
             chat.id,
             f"Banned! User {mention_html(member.user.id, html.escape(member.user.first_name))} "
@@ -280,7 +278,6 @@ def punch(update: Update, context: CallbackContext) -> str:
                 message.reply_to_message.delete()
             message.delete()
 
-        # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
         else:
             bot.sendMessage(
                 chat.id,
