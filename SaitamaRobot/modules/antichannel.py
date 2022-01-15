@@ -1,13 +1,24 @@
 from telegram.ext.filters import Filters
-from tg_bot.modules.helper_funcs.decorators import kigcmd, kigmsg
 from telegram import Update, message
-from telegram.ext import CallbackContext
-from ..modules.helper_funcs.anonymous import user_admin, AdminPerms
+from SaitamaRobot.modules.helper_funcs.chat_status import (
+    bot_can_delete,
+    connection_status,
+    dev_plus,
+    user_admin,
+)
+from SaitamaRobot import dispatcher
 import html
-from ..modules.sql.antichannel_sql import antichannel_status, disable_antichannel, enable_antichannel
+from SaitamaRobot.modules.sql.antichannel_sql import antichannel_status, disable_antichannel, enable_antichannel
+from telegram.ext import (
+    CallbackContext,
+    CommandHandler,
+    MessageHandler,
+)
+from SaitamaRobot.modules.helper_funcs.alternate import typing_action
 
-@kigcmd(command="antichannel")
-@user_admin(AdminPerms.CAN_RESTRICT_MEMBERS)
+@typing_action
+@connection_status
+@user_admin
 def set_antichannel(update: Update, context: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
@@ -26,7 +37,6 @@ def set_antichannel(update: Update, context: CallbackContext):
     message.reply_html("Antichannel setting is currently {} in {}".format(antichannel_status(chat.id), html.escape(chat.title)))
 
 
-@kigmsg(Filters.chat_type.groups)
 def eliminate_channel(update: Update, context: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
@@ -37,4 +47,22 @@ def eliminate_channel(update: Update, context: CallbackContext):
         message.delete()
         sender_chat = message.sender_chat
         bot.ban_chat_sender_chat(sender_chat_id=sender_chat.id, chat_id=chat.id)
-    
+
+
+__help__ = """
+Restrict users from sending as anonymous channels
+ • `/antichannel <on/off/yes/no>`*:* enables antichannel in the current chat
+If enabled, the message from the channel which the user sends will be banned.
+"""
+
+ANTICHANNEL_HANDLER = CommandHandler("antichannel", set_antichannel, run_async=True)
+ELIMINATE_CHANNEL_HANDLER = MessageHandler(Filters.chat_type.groups, eliminate_channel, run_async=True)
+
+dispatcher.add_handler(ANTICHANNEL_HANDLER)
+dispatcher.add_handler(ELIMINATE_CHANNEL_HANDLER)
+__mod_name__ = "Antichannel"
+
+__handlers__ = [
+    ANTICHANNEL_HANDLER,
+    ELIMINATE_CHANNEL_HANDLER
+    ]
