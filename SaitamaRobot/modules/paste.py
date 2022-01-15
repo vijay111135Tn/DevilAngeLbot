@@ -6,6 +6,7 @@ from telegram.ext import CallbackContext
 
 scrapper = cloudscraper.create_scraper()
 
+
 def paste(update: Update, context: CallbackContext):
     args = context.args
     message = update.effective_message

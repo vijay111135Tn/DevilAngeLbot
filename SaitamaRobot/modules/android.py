@@ -206,7 +206,9 @@ def orangefox(update, context):
             model = page["model_name"]
             full_name = page["full_name"]
             maintainer = page["maintainer"]["username"]
-            link = scrapper.get(f"https://api.orangefox.download/v3/releases/get?_id={file_id}")
+            link = scrapper.get(
+                f"https://api.orangefox.download/v3/releases/get?_id={file_id}"
+            )
             page = loads(link.content)
             dl_file = page["filename"]
             build_type = page["type"]

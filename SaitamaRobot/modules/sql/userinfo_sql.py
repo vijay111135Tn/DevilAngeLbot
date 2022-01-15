@@ -1,7 +1,7 @@
 import threading
 
 from SaitamaRobot.modules.sql import BASE, SESSION
-from sqlalchemy import Column, Integer, BigInteger,  UnicodeText
+from sqlalchemy import Column, Integer, BigInteger, UnicodeText
 
 
 class UserInfo(BASE):
