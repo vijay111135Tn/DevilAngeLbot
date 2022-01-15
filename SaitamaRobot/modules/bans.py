@@ -428,7 +428,9 @@ TEMPBAN_HANDLER = CommandHandler(["tban"], temp_ban, run_async=True)
 PUNCH_HANDLER = CommandHandler(["kick", "skick"], punch, run_async=True)
 UNBAN_HANDLER = CommandHandler("unban", unban, run_async=True)
 ROAR_HANDLER = CommandHandler("roar", selfunban, run_async=True)
-PUNCHME_HANDLER = DisableAbleCommandHandler("kickme", punchme, filters=Filters.chat_type.groups, run_async=True)
+PUNCHME_HANDLER = DisableAbleCommandHandler(
+    "kickme", punchme, filters=Filters.chat_type.groups, run_async=True
+)
 
 dispatcher.add_handler(BAN_HANDLER)
 dispatcher.add_handler(TEMPBAN_HANDLER)
