@@ -51,7 +51,7 @@ def set_antichannel(update: Update, context: CallbackContext):
     )
 
 
-@bot_can_delete
+# @bot_can_delete
 def eliminate_channel(update: Update, context: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
