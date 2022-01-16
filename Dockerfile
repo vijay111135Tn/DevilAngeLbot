@@ -2,7 +2,7 @@ FROM docker.io/python:alpine
 
 RUN apk update
 RUN apk upgrade
-RUN apk add libffi-dev gcc git python3-dev libjpeg-turbo-dev zlib-dev postgresql-dev libwebp-dev musl-dev libxml2-dev libxslt-dev
+RUN apk add libffi-dev gcc git python3-dev libjpeg-turbo-dev zlib-dev postgresql-dev libwebp-dev musl-dev libxml2-dev libxslt-dev neofetch
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=1
