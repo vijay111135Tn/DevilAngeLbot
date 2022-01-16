@@ -45,7 +45,8 @@ def stickerid(update: Update, context: CallbackContext):
 
 stickers_url = "https://combot.org/telegram/stickers"
 sticker_pack = namedtuple("Sticker_pack", ["title", "url"])
- 
+
+
 @typing_action
 def cb_sticker(update: Update, context: CallbackContext):
     msg = update.effective_message
@@ -54,14 +55,19 @@ def cb_sticker(update: Update, context: CallbackContext):
         msg.reply_text("Provide some name to search for pack.")
         return
     query = query[1]
-    text = scrapper.get(combot_stickers_url, params={'q': query}).text
+    text = scrapper.get(combot_stickers_url, params={"q": query}).text
     sticker_data = lxml.html.document_fromstring(text)
     sticker_packs = sticker_data.xpath(
-        "body//div[@class='sticker-pack sticker-packs-list__item']")
+        "body//div[@class='sticker-pack sticker-packs-list__item']"
+    )
     sticker_packs = {
         sticker_pack(
-            pack.xpath("div[@class='sticker-pack__header']/div[@class='sticker-pack__title']")[0].text,
-            pack.xpath("div[@class='sticker-pack__header']/a[@class='sticker-pack__btn']/@href")[0]
+            pack.xpath(
+                "div[@class='sticker-pack__header']/div[@class='sticker-pack__title']"
+            )[0].text,
+            pack.xpath(
+                "div[@class='sticker-pack__header']/a[@class='sticker-pack__btn']/@href"
+            )[0],
         )
         for pack in sticker_packs
     }
@@ -72,8 +78,7 @@ def cb_sticker(update: Update, context: CallbackContext):
     for pack in sticker_packs:
         sticker_msg += f"• <a href='{pack.url}'>{pack.title}</a>\n"
     msg.reply_text(
-        text=sticker_msg, parse_mode=ParseMode.HTML,
-        disable_web_page_preview=False
+        text=sticker_msg, parse_mode=ParseMode.HTML, disable_web_page_preview=False
     )
 
 
