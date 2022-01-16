@@ -10,9 +10,11 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
 RUN python3 -m venv /venv
 RUN /venv/bin/pip3 install wheel
 
-COPY . /opt/Clara
 WORKDIR /opt/Clara
+COPY requirements.txt .
 
 RUN /venv/bin/pip3 install -U -r requirements.txt
+
+COPY . .
 
 CMD [ "sh", "-c", "source /venv/bin/activate; python -m SaitamaRobot" ]

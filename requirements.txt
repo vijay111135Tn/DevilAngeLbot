@@ -21,7 +21,7 @@ psutil
 psycopg2-binary
 pynewtonmath
 pyrate-limiter
-python-telegram-bot==13.9
+python-telegram-bot==13.10
 regex
 requests
 speedtest-cli
