@@ -22,6 +22,7 @@ from SaitamaRobot.modules.helper_funcs.alternate import typing_action
 SET_CH_GROUP = 100
 ELEMINATE_CH_GROUP = 110
 
+
 @typing_action
 @user_admin
 def set_antichannel(update: Update, context: CallbackContext):
@@ -48,6 +49,7 @@ def set_antichannel(update: Update, context: CallbackContext):
             antichannel_status(chat.id), html.escape(chat.title)
         )
     )
+
 
 @bot_can_delete
 def eliminate_channel(update: Update, context: CallbackContext):
@@ -77,11 +79,11 @@ ELIMINATE_CHANNEL_HANDLER = MessageHandler(
     Filters.chat_type.groups, eliminate_channel, run_async=True
 )
 
-dispatcher.add_handler(ANTICHANNEL_HANDLER,SET_CH_GROUP)
-dispatcher.add_handler(ELIMINATE_CHANNEL_HANDLER,ELEMINATE_CH_GROUP)
+dispatcher.add_handler(ANTICHANNEL_HANDLER, SET_CH_GROUP)
+dispatcher.add_handler(ELIMINATE_CHANNEL_HANDLER, ELEMINATE_CH_GROUP)
 __mod_name__ = "Antichannel"
 
 __handlers__ = [
     (ANTICHANNEL_HANDLER, SET_CH_GROUP),
-    (ELIMINATE_CHANNEL_HANDLER,ELEMINATE_CH_GROUP)
-    ]
+    (ELIMINATE_CHANNEL_HANDLER, ELEMINATE_CH_GROUP),
+]
