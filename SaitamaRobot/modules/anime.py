@@ -4,7 +4,7 @@ import textwrap
 
 import bs4
 import jikanpy
-import requests
+import cloudscraper
 from SaitamaRobot import dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from telegram import (
@@ -14,7 +14,9 @@ from telegram import (
     Update,
     Message,
 )
-from telegram.ext import CallbackContext, run_async
+from telegram.ext import CallbackContext
+
+scrapper = cloudscraper.create_scraper()
 
 info_btn = "More Information"
 kaizoku_btn = "Kaizoku ☠️"
@@ -176,7 +178,6 @@ def extract_arg(message: Message):
     return None
 
 
-@run_async
 def airing(update: Update, context: CallbackContext):
     message = update.effective_message
     search_str = extract_arg(message)
@@ -186,7 +187,7 @@ def airing(update: Update, context: CallbackContext):
         )
         return
     variables = {"search": search_str}
-    response = requests.post(
+    response = scrapper.post(
         url,
         json={"query": airing_query, "variables": variables},
     ).json()["data"]["Media"]
@@ -200,7 +201,6 @@ def airing(update: Update, context: CallbackContext):
     update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
-@run_async
 def anime(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
@@ -208,7 +208,7 @@ def anime(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Format : /anime < anime name >")
         return
     variables = {"search": search}
-    json = requests.post(
+    json = scrapper.post(
         url,
         json={"query": anime_query, "variables": variables},
     ).json()
@@ -273,7 +273,6 @@ def anime(update: Update, context: CallbackContext):
             )
 
 
-@run_async
 def character(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
@@ -281,7 +280,7 @@ def character(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Format : /character < character name >")
         return
     variables = {"query": search}
-    json = requests.post(
+    json = scrapper.post(
         url,
         json={"query": character_query, "variables": variables},
     ).json()
@@ -309,7 +308,6 @@ def character(update: Update, context: CallbackContext):
             )
 
 
-@run_async
 def manga(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
@@ -317,7 +315,7 @@ def manga(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Format : /manga < manga name >")
         return
     variables = {"search": search}
-    json = requests.post(
+    json = scrapper.post(
         url,
         json={"query": manga_query, "variables": variables},
     ).json()
@@ -377,7 +375,6 @@ def manga(update: Update, context: CallbackContext):
             )
 
 
-@run_async
 def user(update: Update, context: CallbackContext):
     message = update.effective_message
     search_query = extract_arg(message)
@@ -457,12 +454,10 @@ def user(update: Update, context: CallbackContext):
         caption=caption,
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=InlineKeyboardMarkup(buttons),
-        disable_web_page_preview=False,
     )
     progress_message.delete()
 
 
-@run_async
 def upcoming(update: Update, context: CallbackContext):
     jikan = jikanpy.jikan.Jikan()
     upcomin = jikan.top("anime", page=1, subtype="upcoming")
@@ -489,7 +484,7 @@ def site_search(update: Update, context: CallbackContext, site: str):
 
     if site == "kaizoku":
         search_url = f"https://animekaizoku.com/?s={search_query}"
-        html_text = requests.get(search_url).text
+        html_text = scrapper.get(search_url).text
         soup = bs4.BeautifulSoup(html_text, "html.parser")
         search_result = soup.find_all("h2", {"class": "post-title"})
 
@@ -505,7 +500,7 @@ def site_search(update: Update, context: CallbackContext, site: str):
 
     elif site == "kayo":
         search_url = f"https://animekayo.com/?s={search_query}"
-        html_text = requests.get(search_url).text
+        html_text = scrapper.get(search_url).text
         soup = bs4.BeautifulSoup(html_text, "html.parser")
         search_result = soup.find_all("h2", {"class": "title"})
 
@@ -538,12 +533,10 @@ def site_search(update: Update, context: CallbackContext, site: str):
         )
 
 
-@run_async
 def kaizoku(update: Update, context: CallbackContext):
     site_search(update, context, "kaizoku")
 
 
-@run_async
 def kayo(update: Update, context: CallbackContext):
     site_search(update, context, "kayo")
 
@@ -564,14 +557,14 @@ Get information about anime, manga or characters from [AniList](anilist.co).
 
  """
 
-ANIME_HANDLER = DisableAbleCommandHandler("anime", anime)
-AIRING_HANDLER = DisableAbleCommandHandler("airing", airing)
-CHARACTER_HANDLER = DisableAbleCommandHandler("character", character)
-MANGA_HANDLER = DisableAbleCommandHandler("manga", manga)
-USER_HANDLER = DisableAbleCommandHandler("user", user)
-UPCOMING_HANDLER = DisableAbleCommandHandler("upcoming", upcoming)
-KAIZOKU_SEARCH_HANDLER = DisableAbleCommandHandler("kaizoku", kaizoku)
-KAYO_SEARCH_HANDLER = DisableAbleCommandHandler("kayo", kayo)
+ANIME_HANDLER = DisableAbleCommandHandler("anime", anime, run_async=True)
+AIRING_HANDLER = DisableAbleCommandHandler("airing", airing, run_async=True)
+CHARACTER_HANDLER = DisableAbleCommandHandler("character", character, run_async=True)
+MANGA_HANDLER = DisableAbleCommandHandler("manga", manga, run_async=True)
+USER_HANDLER = DisableAbleCommandHandler("user", user, run_async=True)
+UPCOMING_HANDLER = DisableAbleCommandHandler("upcoming", upcoming, run_async=True)
+KAIZOKU_SEARCH_HANDLER = DisableAbleCommandHandler("kaizoku", kaizoku, run_async=True)
+KAYO_SEARCH_HANDLER = DisableAbleCommandHandler("kayo", kayo, run_async=True)
 
 dispatcher.add_handler(ANIME_HANDLER)
 dispatcher.add_handler(CHARACTER_HANDLER)

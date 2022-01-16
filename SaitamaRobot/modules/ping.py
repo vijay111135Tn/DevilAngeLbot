@@ -1,13 +1,15 @@
 import time
 from typing import List
 
-import requests
+import cloudscraper
 from telegram import ParseMode, Update
-from telegram.ext import CallbackContext, run_async
+from telegram.ext import CallbackContext
 
 from SaitamaRobot import StartTime, dispatcher
 from SaitamaRobot.modules.helper_funcs.chat_status import sudo_plus
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
+
+scrapper = cloudscraper.create_scraper()
 
 sites_list = {
     "Telegram": "https://api.telegram.org",
@@ -52,7 +54,7 @@ def ping_func(to_ping: List[str]) -> List[str]:
 
         start_time = time.time()
         site_to_ping = sites_list[each_ping]
-        r = requests.get(site_to_ping)
+        r = scrapper.get(site_to_ping)
         end_time = time.time()
         ping_time = str(round((end_time - start_time), 2)) + "s"
 
@@ -68,7 +70,6 @@ def ping_func(to_ping: List[str]) -> List[str]:
     return ping_result
 
 
-@run_async
 @sudo_plus
 def ping(update: Update, context: CallbackContext):
     msg = update.effective_message
@@ -87,7 +88,6 @@ def ping(update: Update, context: CallbackContext):
     )
 
 
-@run_async
 @sudo_plus
 def pingall(update: Update, context: CallbackContext):
     to_ping = ["Kaizoku", "Kayo", "Telegram", "Jikan"]
@@ -106,8 +106,8 @@ def pingall(update: Update, context: CallbackContext):
     )
 
 
-PING_HANDLER = DisableAbleCommandHandler("ping", ping)
-PINGALL_HANDLER = DisableAbleCommandHandler("pingall", pingall)
+PING_HANDLER = DisableAbleCommandHandler("ping", ping, run_async=True)
+PINGALL_HANDLER = DisableAbleCommandHandler("pingall", pingall, run_async=True)
 
 dispatcher.add_handler(PING_HANDLER)
 dispatcher.add_handler(PINGALL_HANDLER)

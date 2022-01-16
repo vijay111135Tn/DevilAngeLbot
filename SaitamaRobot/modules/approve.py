@@ -7,7 +7,6 @@ from telegram import Update
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext
 from telegram.ext import CallbackQueryHandler
-from telegram.ext import run_async
 from telegram.utils.helpers import mention_html
 
 import SaitamaRobot.modules.sql.approve_sql as sql
@@ -19,7 +18,6 @@ from SaitamaRobot.modules.helper_funcs.extraction import extract_user
 from SaitamaRobot.modules.log_channel import loggable
 
 
-@run_async
 @loggable
 @user_admin
 def approve(update, context):
@@ -64,7 +62,6 @@ def approve(update, context):
     return log_message
 
 
-@run_async
 @loggable
 @user_admin
 def disapprove(update, context):
@@ -103,7 +100,6 @@ def disapprove(update, context):
     return log_message
 
 
-@run_async
 @loggable
 @user_admin
 def approved(update, context):
@@ -122,7 +118,6 @@ def approved(update, context):
         message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
-@run_async
 @loggable
 @user_admin
 def approval(update, context):
@@ -146,7 +141,6 @@ def approval(update, context):
         )
 
 
-@run_async
 def unapproveall(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
@@ -179,7 +173,6 @@ def unapproveall(update: Update, context: CallbackContext):
         )
 
 
-@run_async
 def unapproveall_btn(update: Update, context: CallbackContext):
     query = update.callback_query
     chat = update.effective_chat
@@ -221,12 +214,14 @@ That's what approvals are for - approve of trustworthy users to allow them to se
 - `/unapproveall`*:* Unapprove *ALL* users in a chat. This cannot be undone.
 """
 
-APPROVE = DisableAbleCommandHandler("approve", approve)
-DISAPPROVE = DisableAbleCommandHandler("unapprove", disapprove)
-APPROVED = DisableAbleCommandHandler("approved", approved)
-APPROVAL = DisableAbleCommandHandler("approval", approval)
-UNAPPROVEALL = DisableAbleCommandHandler("unapproveall", unapproveall)
-UNAPPROVEALL_BTN = CallbackQueryHandler(unapproveall_btn, pattern=r"unapproveall_.*")
+APPROVE = DisableAbleCommandHandler("approve", approve, run_async=True)
+DISAPPROVE = DisableAbleCommandHandler("unapprove", disapprove, run_async=True)
+APPROVED = DisableAbleCommandHandler("approved", approved, run_async=True)
+APPROVAL = DisableAbleCommandHandler("approval", approval, run_async=True)
+UNAPPROVEALL = DisableAbleCommandHandler("unapproveall", unapproveall, run_async=True)
+UNAPPROVEALL_BTN = CallbackQueryHandler(
+    unapproveall_btn, pattern=r"unapproveall_.*", run_async=True
+)
 
 dispatcher.add_handler(APPROVE)
 dispatcher.add_handler(DISAPPROVE)

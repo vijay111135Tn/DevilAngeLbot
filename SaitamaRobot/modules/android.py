@@ -4,13 +4,13 @@ from datetime import datetime
 
 from bs4 import BeautifulSoup
 from requests import get
+import cloudscraper
 from telegram import Bot
 from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 from telegram import ParseMode
 from telegram import Update
 from telegram.error import BadRequest
-from telegram.ext import run_async
 from ujson import loads
 
 from SaitamaRobot import dispatcher
@@ -19,6 +19,7 @@ from SaitamaRobot.modules.helper_funcs.alternate import typing_action
 
 GITHUB = "https://github.com"
 DEVICES_DATA = "https://raw.githubusercontent.com/androidtrackers/certified-android-devices/master/by_device.json"
+scrapper = cloudscraper.create_scraper()
 
 
 @typing_action
@@ -188,7 +189,7 @@ def orangefox(update, context):
     btn = ""
 
     if device:
-        link = get(
+        link = scrapper.get(
             f"https://api.orangefox.download/v3/releases/?codename={device}&sort=date_desc&limit=1"
         )
 
@@ -197,7 +198,7 @@ def orangefox(update, context):
         else:
             page = loads(link.content)
             file_id = page["data"][0]["_id"]
-            link = get(
+            link = scrapper.get(
                 f"https://api.orangefox.download/v3/devices/get?codename={device}"
             )
             page = loads(link.content)
@@ -205,14 +206,16 @@ def orangefox(update, context):
             model = page["model_name"]
             full_name = page["full_name"]
             maintainer = page["maintainer"]["username"]
-            link = get(f"https://api.orangefox.download/v3/releases/get?_id={file_id}")
+            link = scrapper.get(
+                f"https://api.orangefox.download/v3/releases/get?_id={file_id}"
+            )
             page = loads(link.content)
             dl_file = page["filename"]
             build_type = page["type"]
             version = page["version"]
             changelog = page["changelog"][0]
             size = str(round(float(page["size"]) / 1024 / 1024, 1)) + "MB"
-            dl_link = page["mirrors"]["DL"]
+            dl_link = page["mirrors"]["US"]
             date = datetime.fromtimestamp(page["date"])
             md5 = page["md5"]
             msg = f"*Latest OrangeFox Recovery for the {full_name}*\n\n"

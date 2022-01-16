@@ -1,11 +1,12 @@
-import requests
+import cloudscraper
 from SaitamaRobot import dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from telegram import ParseMode, Update
-from telegram.ext import CallbackContext, run_async
+from telegram.ext import CallbackContext
+
+scrapper = cloudscraper.create_scraper()
 
 
-@run_async
 def paste(update: Update, context: CallbackContext):
     args = context.args
     message = update.effective_message
@@ -21,7 +22,7 @@ def paste(update: Update, context: CallbackContext):
         return
 
     key = (
-        requests.post("https://nekobin.com/api/documents", json={"content": data})
+        scrapper.post("https://nekobin.com/api/documents", json={"content": data})
         .json()
         .get("result")
         .get("key")
@@ -38,7 +39,7 @@ def paste(update: Update, context: CallbackContext):
     )
 
 
-PASTE_HANDLER = DisableAbleCommandHandler("paste", paste)
+PASTE_HANDLER = DisableAbleCommandHandler("paste", paste, run_async=True)
 dispatcher.add_handler(PASTE_HANDLER)
 
 __command_list__ = ["paste"]

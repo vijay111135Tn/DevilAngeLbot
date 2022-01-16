@@ -1,15 +1,16 @@
 from random import randint
 
-import requests as r
+import cloudscraper
 from SaitamaRobot import SUPPORT_CHAT, WALL_API, dispatcher
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from telegram import Update
-from telegram.ext import CallbackContext, run_async
+from telegram.ext import CallbackContext
+
+scrapper = cloudscraper.create_scraper()
 
 # Wallpapers module by @TheRealPhoenix using wall.alphacoders.com
 
 
-@run_async
 def wall(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     msg = update.effective_message
@@ -23,7 +24,7 @@ def wall(update: Update, context: CallbackContext):
     else:
         caption = query
         term = query.replace(" ", "%20")
-        json_rep = r.get(
+        json_rep = scrapper.get(
             f"https://wall.alphacoders.com/api2.0/get.php?auth={WALL_API}&method=search&term={term}",
         ).json()
         if not json_rep.get("success"):
@@ -55,5 +56,5 @@ def wall(update: Update, context: CallbackContext):
                 )
 
 
-WALLPAPER_HANDLER = DisableAbleCommandHandler("wall", wall)
+WALLPAPER_HANDLER = DisableAbleCommandHandler("wall", wall, run_async=True)
 dispatcher.add_handler(WALLPAPER_HANDLER)
