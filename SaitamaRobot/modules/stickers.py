@@ -4,7 +4,7 @@ import requests
 import urllib.request as urllib
 from PIL import Image
 from html import escape
-from bs4 import BeautifulSoup as bs
+from collections import namedtuple
 
 from telegram import ParseMode, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram import TelegramError, Update
@@ -16,6 +16,7 @@ from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from SaitamaRobot.modules.helper_funcs.alternate import typing_action
 
 import cloudscraper
+import lxml.html
 
 scrapper = cloudscraper.create_scraper()
 
@@ -42,24 +43,38 @@ def stickerid(update: Update, context: CallbackContext):
         )
 
 
+stickers_url = "https://combot.org/telegram/stickers"
+sticker_pack = namedtuple("Sticker_pack", ["title", "url"])
+ 
+@typing_action
 def cb_sticker(update: Update, context: CallbackContext):
     msg = update.effective_message
-    split = msg.text.split(" ", 1)
-    if len(split) == 1:
+    query = msg.text.split(maxsplit=1)
+    if len(query) == 1:
         msg.reply_text("Provide some name to search for pack.")
         return
-    text = scrapper.get(combot_stickers_url + split[1]).text
-    soup = bs(text, "lxml")
-    results = soup.find_all("a", {"class": "sticker-pack__btn"})
-    titles = soup.find_all("div", "sticker-pack__title")
-    if not results:
+    query = query[1]
+    text = scrapper.get(combot_stickers_url, params={'q': query}).text
+    sticker_data = lxml.html.document_fromstring(text)
+    sticker_packs = sticker_data.xpath(
+        "body//div[@class='sticker-pack sticker-packs-list__item']")
+    sticker_packs = {
+        sticker_pack(
+            pack.xpath("div[@class='sticker-pack__header']/div[@class='sticker-pack__title']")[0].text,
+            pack.xpath("div[@class='sticker-pack__header']/a[@class='sticker-pack__btn']/@href")[0]
+        )
+        for pack in sticker_packs
+    }
+    if not sticker_packs:
         msg.reply_text("No results found :(.")
         return
-    reply = f"Stickers for *{split[1]}*:"
-    for result, title in zip(results, titles):
-        link = result["href"]
-        reply += f"\n• [{title.get_text()}]({link})"
-    msg.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
+    sticker_msg = f"Results for <b>{query}</b>:\n"
+    for pack in sticker_packs:
+        sticker_msg += f"• <a href='{pack.url}'>{pack.title}</a>\n"
+    msg.reply_text(
+        text=sticker_msg, parse_mode=ParseMode.HTML,
+        disable_web_page_preview=False
+    )
 
 
 def getsticker(update: Update, context: CallbackContext):
