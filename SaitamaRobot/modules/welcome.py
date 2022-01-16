@@ -1,4 +1,3 @@
-from email import message
 import html
 import random
 import re
@@ -429,7 +428,7 @@ def new_member(update: Update, context: CallbackContext):
                             },
                         )
                     new_join_mem = f'<a href="tg://user?id={user.id}">{html.escape(new_mem.first_name)}</a>'
-                    message = msg.reply_text(
+                    reply_message = msg.reply_text(
                         f"{new_join_mem}, click the button below to prove you're human.\nYou have 60 seconds.",
                         reply_markup=InlineKeyboardMarkup(
                             [
@@ -459,7 +458,7 @@ def new_member(update: Update, context: CallbackContext):
                         ),
                     )
                     job_queue.run_once(
-                        partial(check_not_bot, new_mem, chat.id, message.message_id),
+                        partial(check_not_bot, new_mem, chat.id, msg.message_id, reply_message.message_id),
                         60,
                         name="welcomemute",
                     )
@@ -515,7 +514,7 @@ def new_member(update: Update, context: CallbackContext):
     return ""
 
 
-def check_not_bot(member, chat_id, message_id, context):
+def check_not_bot(member, chat_id, message_id, reply_message_id, context):
     bot = context.bot
     member_dict = VERIFIED_USER_WAITLIST.pop(member.id)
     member_status = member_dict.get("status")
@@ -528,9 +527,9 @@ def check_not_bot(member, chat_id, message_id, context):
             bot.edit_message_text(
                 "*kicks user*\nThey can always rejoin and try.",
                 chat_id=chat_id,
-                message_id=message_id,
+                message_id=reply_message_id,
             )
-            context.job_queue.run_once(del_kick_msg, 15, context=[chat_id, message_id])
+            context.job_queue.run_once(del_kick_msg, 15, context=[chat_id, message_id, reply_message_id])
         except:
             pass
     
@@ -538,7 +537,9 @@ def check_not_bot(member, chat_id, message_id, context):
 def del_kick_msg(context: CallbackContext):
     chat_id=context.job.context[0]
     message_id=context.job.context[1]
+    reply_message_id=context.job.context[2]
     try:
+        context.bot.delete_message(chat_id, reply_message_id)
         context.bot.delete_message(chat_id, message_id)
     except:
         pass
