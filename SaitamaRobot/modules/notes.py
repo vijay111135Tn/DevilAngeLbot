@@ -192,11 +192,11 @@ def get(
                         parse_mode=parseMode,
                         reply_markup=keyboard,
                     )
-                elif ENUM_FUNC_MAP[note.msgtype] == dispatcher.bot.send_sticker:	
-                    ENUM_FUNC_MAP[note.msgtype](	
-                        chat_id,	
-                        note.file,	
-                        reply_to_message_id=reply_id,	
+                elif ENUM_FUNC_MAP[note.msgtype] == dispatcher.bot.send_sticker:
+                    ENUM_FUNC_MAP[note.msgtype](
+                        chat_id,
+                        note.file,
+                        reply_to_message_id=reply_id,
                         reply_markup=keyboard,
                     )
                 else:
@@ -413,9 +413,9 @@ def slash_get(update: Update, context: CallbackContext):
 def save(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     msg = update.effective_message  # type: Optional[Message]
-    m = msg.text.split(' ', 1)	
-    if len(m) == 1:	
-        msg.reply_text("Provide something to save.")	
+    m = msg.text.split(" ", 1)
+    if len(m) == 1:
+        msg.reply_text("Provide something to save.")
         return
     note_name, text, data_type, content, buttons = get_note_type(msg)
     note_name = note_name.lower()
