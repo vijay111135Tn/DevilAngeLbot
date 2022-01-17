@@ -405,12 +405,12 @@ def reply_filter(update, context):
                                 LOGGER.exception(
                                     "Failed to send message: " + excp.message
                                 )
-                elif ENUM_FUNC_MAP[filt.file_type] == dispatcher.bot.send_sticker:	
-                    ENUM_FUNC_MAP[filt.file_type](	
-                        chat.id,	
-                        filt.file_id,	
-                        reply_to_message_id=message.message_id,	
-                        reply_markup=keyboard,	
+                elif ENUM_FUNC_MAP[filt.file_type] == dispatcher.bot.send_sticker:
+                    ENUM_FUNC_MAP[filt.file_type](
+                        chat.id,
+                        filt.file_id,
+                        reply_to_message_id=message.message_id,
+                        reply_markup=keyboard,
                     )
                 else:
                     try:
