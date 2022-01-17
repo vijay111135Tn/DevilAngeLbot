@@ -35,6 +35,7 @@ from telegram.ext import (
     MessageHandler,
 )
 
+JOIN_LOGGER = None
 FILE_MATCHER = re.compile(r"^###file_id(!photo)?###:(.*?)(?:\s|$)")
 STICKER_MATCHER = re.compile(r"^###sticker(!photo)?###:")
 BUTTON_MATCHER = re.compile(r"^###button(!photo)?###:(.*?)(?:\s|$)")
@@ -189,7 +190,13 @@ def get(
                         text,
                         reply_to_message_id=reply_id,
                         parse_mode=parseMode,
-                        disable_web_page_preview=True,
+                        reply_markup=keyboard,
+                    )
+                elif ENUM_FUNC_MAP[note.msgtype] == dispatcher.bot.send_sticker:	
+                    ENUM_FUNC_MAP[note.msgtype](	
+                        chat_id,	
+                        note.file,	
+                        reply_to_message_id=reply_id,	
                         reply_markup=keyboard,
                     )
                 else:
@@ -199,7 +206,6 @@ def get(
                         caption=text,
                         reply_to_message_id=reply_id,
                         parse_mode=parseMode,
-                        disable_web_page_preview=True,
                         reply_markup=keyboard,
                     )
 
@@ -407,7 +413,10 @@ def slash_get(update: Update, context: CallbackContext):
 def save(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     msg = update.effective_message  # type: Optional[Message]
-
+    m = msg.text.split(' ', 1)	
+    if len(m) == 1:	
+        msg.reply_text("Provide something to save.")	
+        return
     note_name, text, data_type, content, buttons = get_note_type(msg)
     note_name = note_name.lower()
     if data_type is None:
