@@ -372,7 +372,7 @@ def reply_filter(update, context):
                     try:
                         context.bot.send_message(
                             chat.id,
-                            filtext,
+                            markdown_to_html(filtext),
                             reply_to_message_id=message.message_id,
                             parse_mode=ParseMode.HTML,
                             disable_web_page_preview=True,
@@ -384,7 +384,7 @@ def reply_filter(update, context):
                             try:
                                 context.bot.send_message(
                                     chat.id,
-                                    filtext,
+                                    markdown_to_html(filtext),
                                     parse_mode=ParseMode.HTML,
                                     disable_web_page_preview=True,
                                     reply_markup=keyboard,
@@ -405,16 +405,21 @@ def reply_filter(update, context):
                                 LOGGER.exception(
                                     "Failed to send message: " + excp.message
                                 )
-                                pass
+                elif ENUM_FUNC_MAP[filt.file_type] == dispatcher.bot.send_sticker:	
+                    ENUM_FUNC_MAP[filt.file_type](	
+                        chat.id,	
+                        filt.file_id,	
+                        reply_to_message_id=message.message_id,	
+                        reply_markup=keyboard,	
+                    )
                 else:
                     try:
                         ENUM_FUNC_MAP[filt.file_type](
                             chat.id,
                             filt.file_id,
-                            caption=filtext,
+                            caption=markdown_to_html(filtext),
                             reply_to_message_id=message.message_id,
                             parse_mode=ParseMode.HTML,
-                            disable_web_page_preview=True,
                             reply_markup=keyboard,
                         )
                     except BadRequest:
