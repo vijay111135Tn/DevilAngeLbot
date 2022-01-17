@@ -553,14 +553,15 @@ def list_notes(update: Update, context: CallbackContext):
 def list_notes_real(update, chat_id, private_notes=False):
     note_list = sql.get_all_chat_notes(chat_id)
     notes = len(note_list) + 1
-    msg = "Get note by `/notenumber` or `#notename` \n\n  *ID*    *Note* \n"
+    if private_notes:
+        msg = "Tap on the notename to view the note! \n\n"
+    else:
+        msg = "Get note by `/notenumber` or `#notename` \n\n  *ID*    *Note* \n"
     for note_id, note in zip(range(1, notes), note_list):
         if note_id < 10:
             if private_notes:
-                msg = "Tap on the notename to view the notes \n\n  *ID*    *Note* \n"
                 note_name = f"`{note_id:2}.` [{note.name.lower()}]({make_note_url(chat_id, note.name.lower())})\n"
             else:
-                msg = "Tap on the notename to view the notes \n\n  *ID*    *Note* \n"
                 note_name = f"`{note_id:2}.`  `#{(note.name.lower())}`\n"
         else:
             if private_notes:
