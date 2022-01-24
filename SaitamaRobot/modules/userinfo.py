@@ -17,15 +17,11 @@ from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.types import ChannelParticipantsAdmins
 
 import SaitamaRobot.modules.sql.userinfo_sql as sql
-from SaitamaRobot import DEMONS
 from SaitamaRobot import DEV_USERS
 from SaitamaRobot import dispatcher
-from SaitamaRobot import DRAGONS
 from SaitamaRobot import INFOPIC
 from SaitamaRobot import OWNER_ID
 from SaitamaRobot import telethn as SaitamaTelethonClient
-from SaitamaRobot import TIGERS
-from SaitamaRobot import WOLVES
 from SaitamaRobot.__main__ import STATS
 from SaitamaRobot.__main__ import TOKEN
 from SaitamaRobot.__main__ import USER_INFO
@@ -79,11 +75,7 @@ def get_id(update: Update, context: CallbackContext):
             )
 
 
-@SaitamaTelethonClient.on(
-    events.NewMessage(
-        pattern="/ginfo ", from_users=(TIGERS or []) + (DRAGONS or []) + (DEMONS or [])
-    )
-)
+
 async def group_info(event) -> None:
     chat = event.text.split(" ", 1)[1]
     try:
@@ -194,18 +186,6 @@ def info(update: Update, context: CallbackContext):
         disaster_level_present = True
     elif user.id in DEV_USERS:
         text += "\n\nThis user is member of 'Hero Association'."
-        disaster_level_present = True
-    elif user.id in DRAGONS:
-        text += "\n\nThe Disaster level of this person is 'Dragon'."
-        disaster_level_present = True
-    elif user.id in DEMONS:
-        text += "\n\nThe Disaster level of this person is 'Demon'."
-        disaster_level_present = True
-    elif user.id in TIGERS:
-        text += "\n\nThe Disaster level of this person is 'Tiger'."
-        disaster_level_present = True
-    elif user.id in WOLVES:
-        text += "\n\nThe Disaster level of this person is 'Wolf'."
         disaster_level_present = True
 
     if disaster_level_present:

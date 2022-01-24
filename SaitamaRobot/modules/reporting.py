@@ -1,6 +1,6 @@
 import html
 
-from SaitamaRobot import LOGGER, DRAGONS, TIGERS, WOLVES, dispatcher
+from SaitamaRobot import LOGGER, dispatcher
 from SaitamaRobot.modules.helper_funcs.chat_status import user_admin, user_not_admin
 from SaitamaRobot.modules.log_channel import loggable
 from SaitamaRobot.modules.sql import reporting_sql as sql
@@ -16,7 +16,6 @@ from telegram.ext import (
 from telegram.utils.helpers import mention_html
 
 REPORT_GROUP = 12
-REPORT_IMMUNE_USERS = DRAGONS + TIGERS + WOLVES
 
 
 @user_admin
@@ -88,10 +87,6 @@ def report(update: Update, context: CallbackContext) -> str:
 
         if user.id == bot.id:
             message.reply_text("Nice try.")
-            return ""
-
-        if reported_user.id in REPORT_IMMUNE_USERS:
-            message.reply_text("Uh? You reporting a disaster?")
             return ""
 
         if chat.username and chat.type == Chat.SUPERGROUP:

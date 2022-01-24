@@ -17,7 +17,6 @@ from telegram.utils.helpers import escape_markdown
 from telegram.utils.helpers import mention_html
 
 from SaitamaRobot import dispatcher
-from SaitamaRobot import DRAGONS
 from SaitamaRobot import LOGGER
 from SaitamaRobot.modules.connection import connected
 from SaitamaRobot.modules.disable import DisableAbleCommandHandler
@@ -505,7 +504,7 @@ def rmall_filters(update, context):
     chat = update.effective_chat
     user = update.effective_user
     member = chat.get_member(user.id)
-    if member.status != "creator" and user.id not in DRAGONS:
+    if member.status != "creator":
         update.effective_message.reply_text(
             "Only the chat owner can clear all notes at once."
         )
@@ -533,7 +532,7 @@ def rmall_callback(update, context):
     msg = update.effective_message
     member = chat.get_member(query.from_user.id)
     if query.data == "filters_rmall":
-        if member.status == "creator" or query.from_user.id in DRAGONS:
+        if member.status == "creator":
             allfilters = sql.get_chat_triggers(chat.id)
             if not allfilters:
                 msg.edit_text("No filters in this chat, nothing to stop!")
@@ -556,7 +555,7 @@ def rmall_callback(update, context):
         if member.status == "member":
             query.answer("You need to be admin to do this.")
     elif query.data == "filters_cancel":
-        if member.status == "creator" or query.from_user.id in DRAGONS:
+        if member.status == "creator":
             msg.edit_text("Clearing of all filters has been cancelled.")
             return
         if member.status == "administrator":

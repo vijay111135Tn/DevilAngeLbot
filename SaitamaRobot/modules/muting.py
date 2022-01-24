@@ -1,7 +1,7 @@
 import html
 from typing import Optional
 
-from SaitamaRobot import LOGGER, TIGERS, dispatcher
+from SaitamaRobot import LOGGER, dispatcher
 from SaitamaRobot.modules.helper_funcs.chat_status import (
     bot_admin,
     can_restrict,
@@ -37,10 +37,6 @@ def check_user(user_id: int, bot: Bot, chat: Chat) -> Optional[str]:
 
     if user_id == bot.id:
         reply = "I'm not gonna MUTE myself, How high are you?"
-        return reply
-
-    if is_user_admin(chat, user_id, member) or user_id in TIGERS:
-        reply = "Find someone else to mute but not this one."
         return reply
 
     return None

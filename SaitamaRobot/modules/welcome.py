@@ -11,10 +11,6 @@ from SaitamaRobot import (
     DEV_USERS,
     LOGGER,
     OWNER_ID,
-    DRAGONS,
-    DEMONS,
-    TIGERS,
-    WOLVES,
     dispatcher,
     JOIN_LOGGER,
 )
@@ -209,58 +205,6 @@ def new_member(update: Update, context: CallbackContext):
                     f"{html.escape(chat.title)}\n"
                     f"#USER_JOINED\n"
                     f"Bot Dev just joined the group"
-                )
-                continue
-
-            # Welcome Sudos
-            elif new_mem.id in DRAGONS:
-                update.effective_message.reply_text(
-                    "Whoa! A Dragon disaster just joined! Stay Alert!",
-                    reply_to_message_id=reply,
-                )
-                welcome_log = (
-                    f"{html.escape(chat.title)}\n"
-                    f"#USER_JOINED\n"
-                    f"Bot Sudo just joined the group"
-                )
-                continue
-
-            # Welcome Support
-            elif new_mem.id in DEMONS:
-                update.effective_message.reply_text(
-                    "Huh! Someone with a Demon disaster level just joined!",
-                    reply_to_message_id=reply,
-                )
-                welcome_log = (
-                    f"{html.escape(chat.title)}\n"
-                    f"#USER_JOINED\n"
-                    f"Bot Support just joined the group"
-                )
-                continue
-
-            # Welcome Whitelisted
-            elif new_mem.id in TIGERS:
-                update.effective_message.reply_text(
-                    "Roar! A Tiger disaster just joined!",
-                    reply_to_message_id=reply,
-                )
-                welcome_log = (
-                    f"{html.escape(chat.title)}\n"
-                    f"#USER_JOINED\n"
-                    f"A whitelisted user joined the chat"
-                )
-                continue
-
-            # Welcome Tigers
-            elif new_mem.id in WOLVES:
-                update.effective_message.reply_text(
-                    "Awoo! A Wolf disaster just joined!",
-                    reply_to_message_id=reply,
-                )
-                welcome_log = (
-                    f"{html.escape(chat.title)}\n"
-                    f"#USER_JOINED\n"
-                    f"A whitelisted user joined the chat"
                 )
                 continue
 
