@@ -17,7 +17,7 @@ from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler
 from telegram.utils.helpers import mention_html
 
-BLACKLISTWHITELIST = [OWNER_ID] + DEV_USERS 
+BLACKLISTWHITELIST = [OWNER_ID] + DEV_USERS
 
 
 @dev_plus

@@ -75,7 +75,6 @@ def get_id(update: Update, context: CallbackContext):
             )
 
 
-
 async def group_info(event) -> None:
     chat = event.text.split(" ", 1)[1]
     try:
