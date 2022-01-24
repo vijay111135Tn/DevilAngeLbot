@@ -1372,8 +1372,6 @@ def fed_ban_list(update: Update, context: CallbackContext):
                         parse_mode=ParseMode.MARKDOWN,
                     )
                     return
-                else:
-                    put_chat(chat.id, new_jam, chat_data)
             else:
                 put_chat(chat.id, new_jam, chat_data)
             backups = ""
@@ -1642,10 +1640,7 @@ def fed_import_bans(update: Update, context: CallbackContext):
                     parse_mode=ParseMode.MARKDOWN,
                 )
                 return
-            else:
-                put_chat(chat.id, new_jam, chat_data)
         else:
-
             put_chat(chat.id, new_jam, chat_data)
         # if int(int(msg.reply_to_message.document.file_size)/1024) >= 200:
         # 	msg.reply_text("This file is too big!")

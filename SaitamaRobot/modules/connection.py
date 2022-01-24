@@ -288,7 +288,7 @@ def connected(bot: Bot, update: Update, chat, user_id, need_admin=True):
         ismember = getstatusadmin.status in ("member")
         isallow = sql.allow_connect_to_chat(conn_id)
 
-        if (isadmin) or (isallow and ismember) or (user.id in DEV_USERS):
+        if isadmin or isallow and ismember or user.id in DEV_USERS:
             if need_admin is True:
                 if (
                     getstatusadmin.status in ("administrator", "creator")

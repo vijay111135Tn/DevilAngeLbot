@@ -38,7 +38,9 @@ def check_user(user_id: int, bot: Bot, chat: Chat) -> Optional[str]:
     if user_id == bot.id:
         reply = "I'm not gonna MUTE myself, How high are you?"
         return reply
-
+    if is_user_admin(chat, user_id, member):
+        reply="Find someone else to mute but not this one."
+        return reply
     return None
 
 
