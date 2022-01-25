@@ -670,7 +670,7 @@ def main():
             )
         else:
             updater.start_webhook(webhook_url=URL + TOKEN)
-#hmmmmm
+
     else:
         LOGGER.info("Using long polling.")
         updater.start_polling(timeout=15, read_latency=4, drop_pending_updates=True)
