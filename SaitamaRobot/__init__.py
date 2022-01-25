@@ -36,7 +36,10 @@ if ENV:
 
     JOIN_LOGGER = os.environ.get("JOIN_LOGGER", None)
     OWNER_USERNAME = os.environ.get("OWNER_USERNAME", "@aditya_yadav_27")
-    DB_URI = os.environ.get("DATABASE_URL", "postgresql://buotuaxrivcqao:a567b6b5fb5665df5398112866cbc23c360f4134045861bd61807e31513bf3db@ec2-3-224-157-224.compute-1.amazonaws.com:5432/d4h1mlvqrfs5k3")
+    DB_URI = os.environ.get(
+        "DATABASE_URL",
+        "postgresql://buotuaxrivcqao:a567b6b5fb5665df5398112866cbc23c360f4134045861bd61807e31513bf3db@ec2-3-224-157-224.compute-1.amazonaws.com:5432/d4h1mlvqrfs5k3",
+    )
 
     try:
         DRAGONS = set(int(x) for x in os.environ.get("DRAGONS", "").split())
