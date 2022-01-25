@@ -24,18 +24,19 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 6:
     )
     quit(1)
 
-ENV = bool(os.environ.get("ENV", False))
+ENV = bool(os.environ.get("ENV", True))
 
 if ENV:
-    TOKEN = os.environ.get("TOKEN", None)
+    TOKEN = os.environ.get("TOKEN", "5126627909:AAHcb4iRPB_nTinunpH4rOGhj15bHLF4WeI")
 
     try:
-        OWNER_ID = int(os.environ.get("OWNER_ID", None))
+        OWNER_ID = int(os.environ.get("OWNER_ID", 2056511700))
     except ValueError:
         raise Exception("Your OWNER_ID env variable is not a valid integer.")
 
     JOIN_LOGGER = os.environ.get("JOIN_LOGGER", None)
-    OWNER_USERNAME = os.environ.get("OWNER_USERNAME", None)
+    OWNER_USERNAME = os.environ.get("OWNER_USERNAME", "@aditya_yadav_27")
+    DB_URI = os.environ.get("DATABASE_URL", "postgresql://buotuaxrivcqao:a567b6b5fb5665df5398112866cbc23c360f4134045861bd61807e31513bf3db@ec2-3-224-157-224.compute-1.amazonaws.com:5432/d4h1mlvqrfs5k3")
 
     try:
         DRAGONS = set(int(x) for x in os.environ.get("DRAGONS", "").split())
