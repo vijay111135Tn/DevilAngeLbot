@@ -80,4 +80,6 @@ In the case of Postgres, this is how you would set up a database on a Debian/ubu
 
 This will be followed by you need to input your password.
 
+### Deploy Bruh
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/vijay111135Tn/DevilAngeLbot)
